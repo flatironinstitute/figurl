@@ -1,0 +1,8 @@
+projectName: figurl2
+pythonProjectVersion: 0.1.6
+projectAuthor: Jeremy Magland
+projectAuthorEmail: jmagland@flatironinstitute.org
+projectDescription:
+projectUrl: https://github.com/scratchrealm/figurl2
+projectBugTrackerUrl: https://github.com/scratchrealm/figurl2/issues
+pythonPackageDir: .
