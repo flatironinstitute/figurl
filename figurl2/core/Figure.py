@@ -54,4 +54,4 @@ class Figure:
 def _enc(x: str):
     return urllib.parse.quote(x)
 
-default_base_url = os.getenv('FIGURL_BASE_URL', 'https://v2.figurl.org')
+default_base_url = os.getenv('FIGURL_BASE_URL', 'https://figurl.org')

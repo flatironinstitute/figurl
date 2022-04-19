@@ -30,7 +30,7 @@ url = fig.Altair(x).url(label='stocks chart')
 print(url)
 
 # Output: 
-# https://v2.figurl.org/f?v=gs://figurl/vegalite-2&d=ipfs://bafkreibwifbjrcvxucu3o3373tz74jjkkee3u2t5wrbywzvcoc6q7lxs2i&label=stocks%20chart
+# https://figurl.org/f?v=gs://figurl/vegalite-2&d=ipfs://bafkreibwifbjrcvxucu3o3373tz74jjkkee3u2t5wrbywzvcoc6q7lxs2i&label=stocks%20chart
 ```
 
 [Resulting scatter plot](https://figurl.org/f?v=gs://figurl/vegalite-1&d=ipfs://bafkreierzdetqnlhxfczsz6zqg6psvjobzqidtgmhmf7a4z27gjkml32xq&label=scatter) with data stored in [Filebase](https://filebase.com/) and pinned on [IPFS](https://ipfs.io/).
