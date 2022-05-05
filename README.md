@@ -2,9 +2,9 @@
 
 # figurl
 
-Create shareable, interactive, live figures on the distributed web using Python
+Create web-shareable, interactive, live figures using Python.
 
-See also [kachery-cloud](https://github.com/scratchrealm/kachery-cloud) and [figurl2-gui](https://github.com/scratchrealm/figurl2-gui).
+See also [kachery-cloud](https://github.com/scratchrealm/kachery-cloud)
 
 ## Quick static example
 
@@ -13,7 +13,7 @@ See also [kachery-cloud](https://github.com/scratchrealm/kachery-cloud) and [fig
 
 # pip install altair vega_datasets
 
-import figurl2 as fig
+import figurl as fig
 
 import altair as alt
 from vega_datasets import data
@@ -33,11 +33,11 @@ print(url)
 # https://figurl.org/f?v=gs://figurl/vegalite-2&d=ipfs://bafkreibwifbjrcvxucu3o3373tz74jjkkee3u2t5wrbywzvcoc6q7lxs2i&label=stocks%20chart
 ```
 
-[Resulting scatter plot](https://figurl.org/f?v=gs://figurl/vegalite-1&d=ipfs://bafkreierzdetqnlhxfczsz6zqg6psvjobzqidtgmhmf7a4z27gjkml32xq&label=scatter) with data stored in [Filebase](https://filebase.com/) and pinned on [IPFS](https://ipfs.io/).
+Here is the [resulting scatter plot](https://figurl.org/f?v=gs://figurl/vegalite-1&d=ipfs://bafkreierzdetqnlhxfczsz6zqg6psvjobzqidtgmhmf7a4z27gjkml32xq&label=scatter) with data stored in [Filebase](https://filebase.com/) and pinned on [IPFS](https://ipfs.io/).
 
 ## Other examples
 
-The above is just a stack example. Figurl can do a lot more! Advanced examples coming soon.
+The above is just a static example. Figurl can do a lot more! Advanced examples coming soon.
 
 ## Introduction
 
@@ -46,6 +46,10 @@ The above is just a stack example. Figurl can do a lot more! Advanced examples c
 ## Getting started
 
 [Getting started with Figurl](https://github.com/magland/figurl/wiki/Getting-Started-with-Figurl)
+
+## Information for developers
+
+See [figurl2-gui](https://github.com/scratchrealm/figurl2-gui)
 
 ## Authors
 

@@ -1,6 +1,6 @@
 # pip install altair vega_datasets
 
-import figurl2 as fig
+import figurl as fig
 
 import altair as alt
 from vega_datasets import data

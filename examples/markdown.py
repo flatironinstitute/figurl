@@ -6,7 +6,7 @@ source = '''
 To generate this figure, use something like the following
 
 ```python
-import figurl2 as fig
+import figurl as fig
 
 source = '<define your markdown source>'
 
