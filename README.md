@@ -6,8 +6,6 @@ Create web-shareable, interactive, live figures using Python.
 
 See also [kachery-cloud](https://github.com/scratchrealm/kachery-cloud)
 
-See [these examples](./examples/)
-
 ## Installation and setup
 
 It is recommended that you use a conda environment with Python >= 3.8 and numpy.
@@ -88,6 +86,8 @@ while True:
 Here is the resulting [log table](https://www.figurl.org/f?v=gs://figurl/logtable-1&d=ipfs://bafkreicnwdp627vnoibq7ebspcgdr72fslxypzkhvm42dqgom7ba27hdjm&label=Example%20logtable). The program has been terminated so it won't be live-updating, but you can run the script to create a new live-updating example.
 
 ## Other examples
+
+See [these examples](./examples/).
 
 Figurl can do a lot more! Further examples coming soon.
 
