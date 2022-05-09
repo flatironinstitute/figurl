@@ -92,6 +92,11 @@ Here is the resulting [log table](https://www.figurl.org/f?v=gs://figurl/logtabl
 
 See [these examples](./examples/).
 
+The following projects use Figurl
+
+* [VolumeView](https://github.com/magland/volumeview)
+* [SortingView](https://github.com/magland/sortingview/tree/v2)
+
 Figurl can do a lot more! Further examples coming soon.
 
 ## Introduction
