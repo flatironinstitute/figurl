@@ -96,6 +96,7 @@ The following projects use Figurl
 
 * [VolumeView](https://github.com/magland/volumeview)
 * [SortingView](https://github.com/magland/sortingview/tree/v2)
+* [TiledImage](https://github.com/scratchrealm/figurl-tiled-image)
 
 Figurl can do a lot more! Further examples coming soon.
 
