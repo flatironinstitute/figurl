@@ -67,7 +67,7 @@ class Report(ReportItemContainer):
         }
     def url(self, *, label: str):
         F = Figure(
-            view_url='http://localhost:3000',
+            view_url='gs://figurl/figurl-report',
             data=self.to_dict()
         )
         return F.url(label=label)
