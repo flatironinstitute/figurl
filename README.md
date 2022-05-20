@@ -88,6 +88,10 @@ while True:
 
 Here is the resulting [log table](https://www.figurl.org/f?v=gs://figurl/logtable-1&d=ipfs://bafkreicnwdp627vnoibq7ebspcgdr72fslxypzkhvm42dqgom7ba27hdjm&label=Example%20logtable). The program has been terminated so it won't be live-updating, but you can run the script to create a new live-updating example.
 
+## Reports
+
+See [examples/report.py](examples/report.py) which generates [this report figure](https://www.figurl.org/f?v=gs://figurl/figurl-report&d=ipfs://bafkreie7peuiujotcwcicgharaucsg7qmadmmdfmwjtbr3ilm263ihbh4q&label=Example%20report).
+
 ## Other examples
 
 See [these examples](./examples/).
@@ -97,6 +101,7 @@ The following projects use Figurl
 * [VolumeView](https://github.com/magland/volumeview)
 * [SortingView](https://github.com/magland/sortingview/tree/v2)
 * [TiledImage](https://github.com/scratchrealm/figurl-tiled-image)
+* [finufft-benchmark](https://github.com/scratchrealm/finufft-benchmark)
 
 Figurl can do a lot more! Further examples coming soon.
 
