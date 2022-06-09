@@ -12,7 +12,7 @@ class Figure:
         self._serialized_data = _serialize(self._data, compress_npy=True)
 
         # check up front whether figure data is too large
-        max_data_size = 30 * 1000 * 1000
+        max_data_size = 500 * 1000 * 1000
         data_size = len(json.dumps(self._serialized_data))
         if data_size > max_data_size:
             raise Exception(f'Figure data is too large ({data_size} > {max_data_size} bytes). A live view is probably in order for this figure.')
