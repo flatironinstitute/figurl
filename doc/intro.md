@@ -6,15 +6,17 @@ Figurl offers **browser-based**, **shareable**, **interactive** views of scienti
 datasets in the cloud.
 
 * [Overview](#overview)
-* [Example: Static plot](#example-static-plot)
-* [Example: Report](#example-report)
-* [Example: Log table](#example-log-table)
-* [Example: SortingView](#example-sortingview)
-* [Example: Multi-trial spike train viewer](#example-multi-trial-spike-train-viewer)
-* [Example: Multi-panel timeseries](#example-multi-panel-timeseries)
-* [Example: VolumeView](#example-volumeview)
-* [Example: Tiled image](#example-tiled-image)
-* [Example: Preview raw ephys traces](#example-preview-raw-ephys-traces)
+* [Examples](#examples)
+  - [Static plot](#example-static-plot)
+  - [Report](#example-report)
+  - [Log table](#example-log-table)
+  - [SortingView](#example-sortingview)
+  - [Multi-trial spike train viewer](#example-multi-trial-spike-train-viewer)
+  - [Multi-panel timeseries](#example-multi-panel-timeseries)
+  - [Animal track animation](#example-animal-track-animation)
+  - [VolumeView](#example-volumeview)
+  - [Tiled image](#example-tiled-image)
+  - [Preview raw ephys traces](#example-preview-raw-ephys-traces)
 * [Advantages and discussion](#advantages-and-discussion)
   - [Shareable links](#shareable-links)
   - [Content addressable storage](#content-addressable-storage)
@@ -66,7 +68,9 @@ The Figurl web app ([figurl.org](https://figurl.org)) pairs the data with the vi
 
 An optional backend service can be run in order to provide on-demand calculations and interacting with other advanced features of kachery-cloud such as live feeds.
 
-## Example: Static plot
+## Examples
+
+### Example: Static plot
 
 The following simple example uses [Altair](https://altair-viz.github.io/), a Python wrapper around the [Vega-lite](http://vega.github.io/) visualization grammar. Any Altair chart can be turned into a figurl figure.
 
@@ -100,7 +104,7 @@ Note that this script can be run from anywhere, and the output URL is shareable 
 
 [![image](https://user-images.githubusercontent.com/3679296/174072660-2bdd8ed5-76bc-4272-9d9c-74ee039ee151.png)](https://figurl.org/f?v=gs://figurl/vegalite-2&d=sha1://0369af9f1a54a5a410f99e63cb08b6b899d1c92f&label=stocks%20chart)
 
-## Example: Report
+### Example: Report
 
 A figurl report consists of a collection of sections that are laid out vertically in a scrollable figure. Sectioncan contain markdown text, static plots, and more advanced interactive figures.
 
@@ -110,7 +114,7 @@ Here's an [example report](https://www.figurl.org/f?v=gs://figurl/figurl-report&
 
 [![image](https://user-images.githubusercontent.com/3679296/174073376-8eea5e6d-fba0-4461-bd37-bd49258ac54a.png)](https://www.figurl.org/f?v=gs://figurl/figurl-report&d=ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe&label=FINUFFT%20benchmark)
 
-## Example: Log table
+### Example: Log table
 
 This example shows how a figurl figure can update based on a live feed. This is useful for monitoring a lengthy computation or a live acquisition in real time.
 
@@ -159,7 +163,7 @@ while True:
 
 This example script can be [found here](../examples/logtable.py) and the [output figure is here](https://figurl.org/f?v=gs://figurl/logtable-1&d=sha1://fe780faacc5e9b74e4b26c3058a41ff24823a0e7&label=Example%20logtable). The script that generated this figure has already completed, so you won't see it updating in real time unless you run the script again yourself.
 
-## Example: SortingView
+### Example: SortingView
 
 The real power of figurl is the opportunity for domain-specific custom visualizations.
 
@@ -169,7 +173,7 @@ This visualization also facilitates manual curation: labeling and merging of neu
 
 [![image](https://user-images.githubusercontent.com/3679296/174078633-5672c3ed-e7ba-41c5-9506-739b9a146e63.png)](https://www.figurl.org/f?v=gs://figurl/spikesortingview-4&d=sha1://a482c1e3c5575c8b9b27d12fedabc57266b378c0&project=lqhzprbdrq&label=Test%20workspace)
 
-## Example: Multi-trial spike train viewer
+### Example: Multi-trial spike train viewer
 
 Here's another domain-specific figure in the area of electrophysiology and spike sorting.
 
@@ -177,15 +181,25 @@ See [multiscale-raster](https://github.com/scratchrealm/multitrial-raster). Here
 
 [![image](https://user-images.githubusercontent.com/3679296/174079122-20c29a95-17a5-4c5f-b503-16aa8bfc2683.png)](https://www.figurl.org/f?v=gs://figurl/multitrial-raster-2&d=sha1://8a9686064f3cf7758c678defa3902094790af76c&label=Multi-trial%20raster)
 
-## Example: Multi-panel timeseries
+### Example: Multi-panel timeseries
 
-Here's an [example](https://www.figurl.org/f?v=gs://figurl/spikesortingview-4&d=sha1://8ef0c7782498a6f0f79053143246de26438f4c64&project=lqhzprbdrq&label=Jaq_03_12_visualization_data) of multiple timeseries widgets that are stacked vertically. These are zoomable and synchronized. The top panel is a spike raster plot. The bottom panel uses a live backend to compute data on demand depending on the zoom activity of the user.
+Here's an example of multiple timeseries widgets that are stacked vertically. These are zoomable and synchronized. The top panel is a spike raster plot. The bottom panel uses a live backend to compute data on demand depending on the zoom activity of the user.
 
 > Note: in this example, the backend will probably not be running at the time you are viewing it. Therefore, on the lower panel, only sections that have already been computed will be visible.
 
-[![image](https://user-images.githubusercontent.com/3679296/174131364-746554d1-adf3-40f7-a3ba-d5c5a47c700c.png)](https://www.figurl.org/f?v=gs://figurl/spikesortingview-4&d=sha1://8ef0c7782498a6f0f79053143246de26438f4c64&project=lqhzprbdrq&label=Jaq_03_12_visualization_data)
+(Not publicly accessible at this time)
 
-## Example: VolumeView
+![image](https://user-images.githubusercontent.com/3679296/174131364-746554d1-adf3-40f7-a3ba-d5c5a47c700c.png)
+
+### Example: Animal track animation
+
+Animation of animal position on a track over time.
+
+(Not publicly accessible at this time)
+
+![image](https://user-images.githubusercontent.com/3679296/174148482-95fea08c-b5e9-4289-a002-9dc430719cc8.png)
+
+### Example: VolumeView
 
 [VolumeView](https://github.com/magland/volumeview) is a figurl plugin for visualizing 3D volumetric data, vector fields, and surfaces.
 
@@ -198,7 +212,7 @@ Here are some example output figures:
 
 [![image](https://user-images.githubusercontent.com/3679296/174079546-6c9171a1-3ffe-4589-81e7-2e56bab071eb.png)](https://figurl.org/f?v=gs://figurl/volumeview-3&d=ipfs://bafkreig3jprc63qh25zv6si6cjh6a35tl72hp6ipwxdou3mvqrgvt3wbhu&label=Test%20grid%20vector%20field)
 
-## Example: Tiled image
+### Example: Tiled image
 
 [figurl-tiled-image](https://github.com/scratchrealm/figurl-tiled-image) allows interactive visualization of very large images in a multi-scale zoomable tiled image display (Google maps style) using [deck.gl](https://deck.gl/). You can view a stack of images, and interactively toggle between the various layers.
 
@@ -243,7 +257,7 @@ print(url)
 
 [![image](https://user-images.githubusercontent.com/3679296/174079799-affffdc0-b09f-4750-b148-0d3aba48244b.png)](https://figurl.org/f?v=gs://figurl/figurl-tiled-image-2&d=sha1://95755f9a7f02ab41fa03aff038bc97eff850d7a2&label=Mandelbrot%20tiled%20image)
 
-## Example: Preview raw ephys traces
+### Example: Preview raw ephys traces
 
 The above TiledImage plugin can be used with [SpikeInterface](https://github.com/SpikeInterface/spikeinterface) to generate zoomable views of raw ephys data at various stages of preprocessing. This is useful for quality control and for inspecting the effects of filtering, denoising, etc. See [these notes](https://github.com/catalystneuro/spike-sorting-hackathon/tree/main/projects/visualizing-raw-data).
 
