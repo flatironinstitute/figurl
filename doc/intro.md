@@ -1,11 +1,11 @@
-<img src="./figurl.png" width="200px" />
+<img src="../figurl.png" width="200px" />
 
 # Introduction to Figurl
 
 Figurl offers **browser-based**, **shareable**, **interactive** views of scientific
 datasets in the cloud.
 
-* [Concept](#concept)
+* [Overview](#overview)
 * [Example: Static plot](#example-static-plot)
 * [Example: Report](#example-report)
 * [Example: Log table](#example-log-table)
@@ -15,14 +15,14 @@ datasets in the cloud.
 * [Example: Tiled image](#example-tiled-image)
 * [Example: Preview raw ephys traces](#example-preview-raw-ephys-traces)
 
-## Concept
+## Overview
 
-Generate a figURL (permalink) to an interactive visualization from any Python script
+Generate a figURL (permalink) to an interactive visualization from a Python script
 
 * Generate from anywhere: workstation, notebook, continuous integration, etc.
 * Minimal configuration
 
-Data needed for the visualization is stored in the cloud
+Data needed for the visualization stored in the cloud
 
 * See [kachery-cloud](https://github.com/scratchrealm/kachery-cloud)
 * Content-addressable storage
@@ -34,9 +34,9 @@ Visualization plugin stored in cloud
 * Versioned HTML bundles
 * ReactJS / typescript - highly recommended but not strictly required
 
-URL points to the data and the visualization plugin
+URL points to data and visualization plugin
 
-* Data is referenced via content-hash URI
+* Data object is referenced via content-hash URI
 * Visualization plugin is a static, versioned HTML bundle and is referenced by URI to a cloud bucket
 
 Figurl web app ([figurl.org](https://figurl.org)) pairs the data with the visualization and presents the interactive view to the user
