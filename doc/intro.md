@@ -23,6 +23,7 @@ datasets in the cloud.
   - [Live feeds](#live-feeds)
   - [Task backends](#task-backends)
 * [Creating a visualization plugin](#creating-a-visualization-plugin)
+* [Using your own cloud storage](#using-your-own-cloud-storage)
 
 ## Overview
 
@@ -38,13 +39,15 @@ The data objects required for the visualization are stored in the cloud.
 
 * See [kachery-cloud](https://github.com/scratchrealm/kachery-cloud)
 * Content-addressable storage
-* Configurable storage backend: Google, AWS, Wasabi, Filebase
+* You can use our storage for free to get started (no configuration)
+* Or configure your own storage bucket: Google, AWS, Wasabi, Filebase
 
 The visualization plugin (HTML bundle) is also stored in the cloud.
 
 * Domain-specific visualization plugins
 * Versioned HTML bundles
 * ReactJS / typescript - highly recommended but not strictly required
+* Template available for creating custom visualizations
 
 The shareable URL points uniquely to data objects and the visualization plugin.
 
@@ -320,6 +323,10 @@ This section needs to be finished.
 ## Creating a visualization plugin
 
 This section needs to be written. For now, take a look at this template project which can be modified to build a custom visualization for figurl.
+
+## Using your own cloud storage
+
+By default, figurl will use our inexpensive cloud storage, and your data is not guaranteed to be available forever. However, it is also possible to configure your own cloud storage provider, which you pay for. This configuration is available in the web app at the time you configure your kachery-cloud client. We support Google, AWS, Wasabi and Filebase buckets. For more information see the [kachery-cloud documentation](https://github.com/scratchrealm/kachery-cloud).
 
 https://github.com/scratchrealm/figurl-visualization-template
 
