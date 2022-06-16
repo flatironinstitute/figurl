@@ -51,7 +51,7 @@ The visualization plugin (HTML bundle) is also stored in the cloud.
 * ReactJS / typescript - highly recommended but not strictly required
 * Template available for creating custom visualizations
 
-The shareable URL points uniquely to data objects and the visualization plugin.
+The shareable URL points uniquely to a data object and the visualization plugin.
 
 * Data object is referenced via content-hash URI
 * Visualization plugin is a static, versioned HTML bundle and is referenced by URI to a cloud bucket
