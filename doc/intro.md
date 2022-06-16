@@ -1,4 +1,4 @@
-<img src="./figurl.png" width="200px" />
+<img src="../figurl.png" width="200px" />
 
 # Introduction to Figurl
 
