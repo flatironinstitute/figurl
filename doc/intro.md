@@ -265,6 +265,8 @@ The above TiledImage plugin can be used with [SpikeInterface](https://github.com
 
 [![image](https://user-images.githubusercontent.com/3679296/174080284-ecea8725-a778-4921-8579-4c2c13ee73f5.png)](https://www.figurl.org/f?v=gs://figurl/figurl-tiled-image-2&d=ipfs://QmRAkF6S2RWCxYDCjm5ov9LtxA4SivM1ETzHSphQAsRauv&label=SpikeInterface%20TiledImage%20example)
 
+Here's an example of [60 seconds of Neuropixels raw data](https://www.figurl.org/f?v=gs://figurl/tiled-image-1&d=ipfs://QmSd9GRVwpeQ4hfH5gZfhH48GFZYzYD3XjSdmrdkadBhEF&label=Neuropix-PXI-100_ProbeA-AP%20-%2060%20seconds) (384 channels). This is more than 1 GB of data efficiently loaded into the browser (Google maps style).
+
 ## Advantages and discussion
 
 ### Shareable links
