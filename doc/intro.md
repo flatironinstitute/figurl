@@ -17,29 +17,32 @@ datasets in the cloud.
 
 ## Overview
 
-Generate a figURL (permalink) to an interactive visualization from a Python script
+<!-- https://docs.google.com/drawings/d/1mbB9KZ2Tq-PWOxIRYPc4OpPPDE5YF9U1HjIQ7H5bKJo/edit -->
+![figurl overview](https://user-images.githubusercontent.com/3679296/174104842-cc3956bc-734b-4d38-85cc-f506e61092ec.png)
+
+Figurl lets you use Python to generate a shareable figURL (permalink) to an interactive visualization.
 
 * Generate from anywhere: workstation, notebook, continuous integration, etc.
 * Minimal configuration
 
-Data needed for the visualization stored in the cloud
+The data objects required for the visualization are stored in the cloud.
 
 * See [kachery-cloud](https://github.com/scratchrealm/kachery-cloud)
 * Content-addressable storage
 * Configurable storage backend: Google, AWS, Wasabi, Filebase
 
-Visualization plugin stored in cloud
+The visualization plugin (HTML bundle) is also stored in the cloud.
 
 * Domain-specific visualization plugins
 * Versioned HTML bundles
 * ReactJS / typescript - highly recommended but not strictly required
 
-URL points to data and visualization plugin
+The shareable URL points uniquely to data objects and the visualization plugin.
 
 * Data object is referenced via content-hash URI
 * Visualization plugin is a static, versioned HTML bundle and is referenced by URI to a cloud bucket
 
-Figurl web app ([figurl.org](https://figurl.org)) pairs the data with the visualization and presents the interactive view to the user
+The Figurl web app ([figurl.org](https://figurl.org)) pairs the data with the visualization and presents the interactive view to the user.
 
 * Manages loading of data objects from the cloud
 * Renders the visualization plugin in an embedded iframe
@@ -48,6 +51,8 @@ Figurl web app ([figurl.org](https://figurl.org)) pairs the data with the visual
   - Lazy loading of additional data objects
   - Live feeds (for real-time updates or curation)
   - Task backends (for on-demand computation)
+
+An optional backend service can be run in order to provide on-demand calculations and interacting with other advanced features of kachery-cloud such as live feeds.
 
 ## Example: Static plot
 
