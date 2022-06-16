@@ -74,6 +74,8 @@ Here's the [example script](../examples/altair_vegalite.py) a [link to the outpu
 
 Note that this script can be run from anywhere, and the output URL is shareable and archivable.
 
+[![image](https://user-images.githubusercontent.com/3679296/174072660-2bdd8ed5-76bc-4272-9d9c-74ee039ee151.png)](https://figurl.org/f?v=gs://figurl/vegalite-2&d=sha1://0369af9f1a54a5a410f99e63cb08b6b899d1c92f&label=stocks%20chart)
+
 ## Example: Report
 
 A figurl report consists of a collection of sections that are laid out vertically in a scrollable figure. Sectioncan contain markdown text, static plots, and more advanced interactive figures.
@@ -81,6 +83,8 @@ A figurl report consists of a collection of sections that are laid out verticall
 [This report](https://figurl.org/f?v=gs://figurl/figurl-report&d=sha1://e0f267258f432adcb89c5379c4136c3f00fbce78&label=Example%20report) is the output of [this example script](../examples/report.py) and is self-explanatory.
 
 Here's an [example report](https://www.figurl.org/f?v=gs://figurl/figurl-report&d=ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe&label=FINUFFT%20benchmark) that documents the results of a benchmarking script for the [FINUFFT](https://finufft.readthedocs.io/en/latest/) project. See [finufft-benchmark](https://github.com/scratchrealm/finufft-benchmark).
+
+[![image](https://user-images.githubusercontent.com/3679296/174073376-8eea5e6d-fba0-4461-bd37-bd49258ac54a.png)](https://www.figurl.org/f?v=gs://figurl/figurl-report&d=ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe&label=FINUFFT%20benchmark)
 
 ## Example: Log table
 
