@@ -2,7 +2,7 @@
 
 # figurl
 
-Figurl offers **browser-based**, **shareable**, **interactive** views of scientific
+Browser-based, shareable, interactive views of scientific
 datasets in the cloud.
 
 [Introduction and overview (including examples)](./doc/intro.md)
