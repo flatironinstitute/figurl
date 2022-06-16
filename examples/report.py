@@ -82,3 +82,6 @@ layout.add_altair_chart(chart2)
 
 url = report.url(label='Example report')
 print(url)
+
+# Output:
+# https://figurl.org/f?v=gs://figurl/figurl-report&d=sha1://e0f267258f432adcb89c5379c4136c3f00fbce78&label=Example%20report
