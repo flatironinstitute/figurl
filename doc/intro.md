@@ -11,6 +11,7 @@ datasets in the cloud.
 * [Example: Log table](#example-log-table)
 * [Example: SortingView](#example-sortingview)
 * [Example: Multi-trial spike train viewer](#example-multi-trial-spike-train-viewer)
+* [Example: Multi-panel timeseries](#example-multi-panel-timeseries)
 * [Example: VolumeView](#example-volumeview)
 * [Example: Tiled image](#example-tiled-image)
 * [Example: Preview raw ephys traces](#example-preview-raw-ephys-traces)
@@ -18,6 +19,10 @@ datasets in the cloud.
   - [Shareable links](#shareable-links)
   - [Content addressable storage](#content-addressable-storage)
   - [Visualization plugins](#visualization-plugins)
+* [Advanced capabilities](#advanced-capabilities)
+  - [Live feeds](#live-feeds)
+  - [Task backends](#task-backends)
+* [Creating a visualization plugin](#creating-a-visualization-plugin)
 
 ## Overview
 
@@ -169,6 +174,14 @@ See [multiscale-raster](https://github.com/scratchrealm/multitrial-raster). Here
 
 [![image](https://user-images.githubusercontent.com/3679296/174079122-20c29a95-17a5-4c5f-b503-16aa8bfc2683.png)](https://www.figurl.org/f?v=gs://figurl/multitrial-raster-2&d=sha1://8a9686064f3cf7758c678defa3902094790af76c&label=Multi-trial%20raster)
 
+## Example: Multi-panel timeseries
+
+Here's an [example](https://www.figurl.org/f?v=gs://figurl/spikesortingview-4&d=sha1://8ef0c7782498a6f0f79053143246de26438f4c64&project=lqhzprbdrq&label=Jaq_03_12_visualization_data) of multiple timeseries widgets that are stacked vertically. These are zoomable and synchronized. The top panel is a spike raster plot. The bottom panel uses a live backend to compute data on demand depending on the zoom activity of the user.
+
+| Note: in this example, the backend is probably not running at the time you are viewing it. Therefore, on the lower panel, only sections that have already been computed will be visible.
+
+![image](https://user-images.githubusercontent.com/3679296/174131364-746554d1-adf3-40f7-a3ba-d5c5a47c700c.png)
+
 ## Example: VolumeView
 
 [VolumeView](https://github.com/magland/volumeview) is a figurl plugin for visualizing 3D volumetric data, vector fields, and surfaces.
@@ -289,4 +302,24 @@ The figurl web app (https://figurl.org) pairs the data object defined by the `d`
 Usually the visualization plugin is hosted on a cloud storage bucket. For example, in the Altair plot of the basic example, it is hosted at `gs://figurl/vegalite-2` which is on a Google bucket. Note the `-2` at the end of this URI. If we want to make backward-compatible updates to the visualization that do not break any existing links (improve the layout, add features, etc), then we can just upload the new HTML bundle to that same location. However, if we want to make changes that break existing links (e.g., data spec adjustments), then we can increment that version number, upload the new bundle to `gs://figurl/vegalite-3`, and point future figURLs to the new location.
 
 Visualization plugins are simply static websites that are embedded in the parent figurl.org web app. This is a big simplication compared with traditional websites that usually require a running server that provides a working API. The real work is performed by the parent figurl.org web application. This design is what allows us to store visualization plugins on storage buckets for long-term availability which is crucial for allowing figURLs to stay valid even as the visualization plugins are updated and improved over time.
+
+## Advanced capabilities
+
+### Live feeds
+
+In addition to loading files that have been stored in kachery-cloud, visualizations can make use of live feeds. This is useful for viewing an ongoing process in real time, or for allowing the user to write to an append-only log (e.g., manual curation of a dataset).
+
+This section needs to be finished.
+
+### Task backends
+
+It is not always possible or practical to precompute all data needed for a given visualization. Kachery-cloud task backends provide a means for computing data objects on demand based on user interactions.
+
+This section needs to be finished.
+
+## Creating a visualization plugin
+
+This section needs to be written. For now, take a look at this template project which can be modified to build a custom visualization for figurl.
+
+https://github.com/scratchrealm/figurl-visualization-template
 
