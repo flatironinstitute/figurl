@@ -178,7 +178,7 @@ See [multiscale-raster](https://github.com/scratchrealm/multitrial-raster). Here
 
 Here's an [example](https://www.figurl.org/f?v=gs://figurl/spikesortingview-4&d=sha1://8ef0c7782498a6f0f79053143246de26438f4c64&project=lqhzprbdrq&label=Jaq_03_12_visualization_data) of multiple timeseries widgets that are stacked vertically. These are zoomable and synchronized. The top panel is a spike raster plot. The bottom panel uses a live backend to compute data on demand depending on the zoom activity of the user.
 
-| Note: in this example, the backend is probably not running at the time you are viewing it. Therefore, on the lower panel, only sections that have already been computed will be visible.
+> Note: in this example, the backend will probably not be running at the time you are viewing it. Therefore, on the lower panel, only sections that have already been computed will be visible.
 
 ![image](https://user-images.githubusercontent.com/3679296/174131364-746554d1-adf3-40f7-a3ba-d5c5a47c700c.png)
 
