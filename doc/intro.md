@@ -39,10 +39,10 @@ Figurl lets you use Python to generate a shareable figURL (permalink) to an inte
 
 The data objects required for the visualization are stored in the cloud.
 
-* See [kachery-cloud](https://github.com/scratchrealm/kachery-cloud)
+* See [kachery-cloud](https://github.com/flatironinstitute/kachery-cloud)
 * Content-addressable storage
 * You can use our storage for free to get started (no configuration)
-* Or configure your own storage bucket: Google, AWS, Wasabi, Filebase
+* Or configure your own storage bucket: [Google, AWS, Wasabi, Filebase](https://github.com/flatironinstitute/kachery-cloud#using-your-own-storage-bucket)
 
 The visualization plugin (HTML bundle) is also stored in the cloud.
 
@@ -293,7 +293,7 @@ It is also possible to retrieve that chunk of data directly from an [IPFS](https
 
 https://ipfs.io/ipfs/bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe
 
-Or we can retrieve it using the [kachery-cloud](https://github.com/scratchrealm/kachery-cloud) command-line utility:
+Or we can retrieve it using the [kachery-cloud](https://github.com/flatironinstitute/kachery-cloud) command-line utility:
 
 ```bash
 kachery-cloud-cat ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe
@@ -342,7 +342,7 @@ This section needs to be written. For now, take a look at this template project 
 
 ## Using your own cloud storage
 
-By default, figurl will use our inexpensive cloud storage, and your data is not guaranteed to be available forever. However, it is also possible to configure your own cloud storage provider, which you pay for. This configuration is available in the web app at the time you configure your kachery-cloud client. We support Google, AWS, Wasabi and Filebase buckets. For more information see the [kachery-cloud documentation](https://github.com/scratchrealm/kachery-cloud).
+By default, figurl will use our inexpensive cloud storage, and your data is not guaranteed to be available forever. However, it is also possible to configure your own cloud storage provider, which you pay for. This configuration is available in the web app at the time you configure your kachery-cloud client. We support Google, AWS, Wasabi and Filebase buckets. For more information see the [kachery-cloud documentation](https://github.com/flatironinstitute/kachery-cloud).
 
 https://github.com/scratchrealm/figurl-visualization-template
 

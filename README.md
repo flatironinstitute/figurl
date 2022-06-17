@@ -7,7 +7,7 @@ datasets in the cloud.
 
 [Introduction and overview (including examples)](./doc/intro.md)
 
-See also [kachery-cloud](https://github.com/scratchrealm/kachery-cloud)
+See also [kachery-cloud](https://github.com/flatironinstitute/kachery-cloud)
 
 ## Installation and setup
 
@@ -19,7 +19,7 @@ It is recommended that you use a conda environment with Python >= 3.8 and numpy.
 pip install --upgrade figurl
 ```
 
-Configure your [kachery-cloud](https://github.com/scratchrealm/kachery-cloud) client
+Configure your [kachery-cloud](https://github.com/flatironinstitute/kachery-cloud) client
 
 ```bash
 kachery-cloud-init
@@ -27,6 +27,10 @@ kachery-cloud-init
 ```
 
 To test the system, try running the scripts in the [examples/](./examples/) folder.
+
+## Cloud storage
+
+By default, your data will be stored in our inexpensive cloud buckets, and it is not guaranteed to be available forever. You can also configure figurl to use your own storage buckets. For more information, see [kachery-cloud](https://github.com/flatironinstitute/kachery-cloud).
 
 ## Information for developers
 
