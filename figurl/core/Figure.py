@@ -33,7 +33,7 @@ class Figure:
         return self._data
     def set_data(self, data: Any):
         self._data = data
-        self._serialized_data = _serialize(data)
+        self._serialized_data = _serialize(data, compress_npy=True)
     def url(self, *, label: str, project_id: Union[str, None]=None, base_url: Union[str, None]=None, view_url: Union[str, None] = None):
         if base_url is None:
             base_url = default_base_url
