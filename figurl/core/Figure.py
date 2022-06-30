@@ -6,10 +6,11 @@ import kachery_cloud as kcl
 from .serialize_wrapper import _serialize
 
 class Figure:
-    def __init__(self, *, data: Any, view_url: Union[str, None]=None):
+    def __init__(self, *, data: Any, view_url: Union[str, None]=None, access_group: Union[str, None]=None):
         self._view_url = view_url
         self._data = data
         self._serialized_data = _serialize(self._data, compress_npy=True)
+        self._access_group = access_group
 
         # check up front whether figure data is too large
         max_data_size = 500 * 1000 * 1000
@@ -43,6 +44,8 @@ class Figure:
             # data_hash = self._data_uri.split('/')[2]
             # kc.upload_file(self._data_uri, channel=channel, single_chunk=True)
             self._data_uri = kcl.store_json(self._serialized_data)
+            if self._access_group is not None:
+                self._data_uri = kcl.encrypt_uri(self._data_uri, access_group=self._access_group)
             data_uri = self._data_uri
             if view_url is None:
                 view_url = self._view_url

@@ -9,7 +9,7 @@ def serialize_wrapper(f):
         return _serialize(output)
     return wrapper
 
-def _serialize(x, *, compress_npy=False):
+def _serialize(x, *, compress_npy=False, label: str=''):
     if isinstance(x, np.integer):
         return int(x)
     elif isinstance(x, np.floating):
@@ -17,12 +17,16 @@ def _serialize(x, *, compress_npy=False):
     elif type(x) == dict:
         ret = dict()
         for key, val in x.items():
-            ret[key] = _serialize(val, compress_npy=compress_npy)
+            if not isinstance(key, str):
+                raise Exception(f'serialize: keys must be string not {str(type(key))}: {label}')
+            ret[key] = _serialize(val, compress_npy=compress_npy, label=f'{label}.{key}')
         return ret
     elif (type(x) == list) or (type(x) == tuple):
-        return [_serialize(val, compress_npy=compress_npy) for val in x]
+        return [_serialize(val, compress_npy=compress_npy, label=f'{label}[{ii}]') for ii, val in enumerate(x)]
     elif isinstance(x, np.ndarray):
-        # todo: worry about byte order and data type here
+        # todo: worry about byte order here
+        if str(x.dtype) not in ['int16', 'int32', 'float32']:
+            raise Exception(f'Unable to serialize numpy array with dtype {str(x.dtype)}: {label}')
         ret = {
             '_type': 'ndarray',
             'shape': _serialize(x.shape),
