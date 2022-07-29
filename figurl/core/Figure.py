@@ -35,7 +35,7 @@ class Figure:
     def set_data(self, data: Any):
         self._data = data
         self._serialized_data = _serialize(data, compress_npy=True)
-    def url(self, *, label: str, project_id: Union[str, None]=None, base_url: Union[str, None]=None, view_url: Union[str, None] = None):
+    def url(self, *, label: str, project_id: Union[str, None]=None, base_url: Union[str, None]=None, view_url: Union[str, None] = None, hide_app_bar: bool=False):
         if base_url is None:
             base_url = default_base_url
         if self._view_url is not None: # new system:
@@ -52,6 +52,8 @@ class Figure:
             url = f'{base_url}/f?v={view_url}&d={data_uri}'
             if project_id is not None:
                 url += f'&project={project_id}'
+            if hide_app_bar:
+                url += f'&hide=1'
             url += f'&label={_enc(label)}'
             return url
         else:
