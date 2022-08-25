@@ -65,9 +65,9 @@ class Report(ReportItemContainer):
                 for item in self._items
             ]
         }
-    def url(self, *, label: str):
+    def url(self, *, label: str, local: bool=False):
         F = Figure(
             view_url='gs://figurl/figurl-report',
             data=self.to_dict()
         )
-        return F.url(label=label)
+        return F.url(label=label, local=local)

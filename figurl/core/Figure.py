@@ -35,7 +35,7 @@ class Figure:
     def set_data(self, data: Any):
         self._data = data
         self._serialized_data = _serialize(data, compress_npy=True)
-    def url(self, *, label: str, project_id: Union[str, None]=None, base_url: Union[str, None]=None, view_url: Union[str, None] = None, hide_app_bar: bool=False):
+    def url(self, *, label: str, project_id: Union[str, None]=None, base_url: Union[str, None]=None, view_url: Union[str, None] = None, hide_app_bar: bool=False, local: bool=False):
         if base_url is None:
             base_url = default_base_url
         if self._view_url is not None: # new system:
@@ -43,7 +43,7 @@ class Figure:
             #     self._data_uri = kc.store_json(self._serialized_data)
             # data_hash = self._data_uri.split('/')[2]
             # kc.upload_file(self._data_uri, channel=channel, single_chunk=True)
-            self._data_uri = kcl.store_json(self._serialized_data)
+            self._data_uri = kcl.store_json(self._serialized_data, local=local)
             if self._access_group is not None:
                 self._data_uri = kcl.encrypt_uri(self._data_uri, access_group=self._access_group)
             data_uri = self._data_uri
@@ -55,6 +55,8 @@ class Figure:
             if hide_app_bar:
                 url += f'&hide=1'
             url += f'&label={_enc(label)}'
+            if local:
+                url += f'&local=1'
             return url
         else:
             raise Exception('No self._view_url')
