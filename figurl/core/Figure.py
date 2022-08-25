@@ -60,6 +60,35 @@ class Figure:
             return url
         else:
             raise Exception('No self._view_url')
+    def electron(self, *, label: str, dev: bool=False):
+        url = self.url(label=label, local=True) # important to use local
+        query = _parse_url(url)
+        v = query['v']
+        d = query['d']
+        label = query.get('label', '')
+        cmd = f'figurl-electron -d {d} -v {v}'
+        if label:
+            cmd = cmd + f' --label {label}'
+        if dev is True:
+            cmd = cmd + f' --dev'
+        retcode = os.system(cmd)
+        if retcode is not 0:
+            print(f'Error running electron app. Is figurl-electron installed?')
+        
+
+def _parse_url(url: str):
+    query = {}
+    ind1 = url.index('?')
+    aa = url[ind1 + 1:]
+    bb = aa.split('&')
+    for cc in bb:
+        ind2 = cc.index('=')
+        if ind2 > 0:
+            key = cc[:ind2]
+            val = cc[ind2 + 1:]
+            query[key] = val
+    return query
+
 
 def _enc(x: str):
     return urllib.parse.quote(x)
