@@ -1,4 +1,5 @@
 import os
+import subprocess
 import json
 from typing import Any, Union
 import urllib.parse
@@ -53,10 +54,10 @@ class Figure:
             if project_id is not None:
                 url += f'&project={project_id}'
             if hide_app_bar:
-                url += f'&hide=1'
+                url += '&hide=1'
             url += f'&label={_enc(label)}'
             if local:
-                url += f'&local=1'
+                url += '&local=1'
             return url
         else:
             raise Exception('No self._view_url')
@@ -70,11 +71,15 @@ class Figure:
         if label:
             cmd = cmd + f' --label {label}'
         if dev is True:
-            cmd = cmd + f' --dev'
-        retcode = os.system(cmd)
-        if retcode is not 0:
-            print(f'Error running electron app. Is figurl-electron installed?')
-        
+            cmd = cmd + ' --dev'
+
+        # this is important because $HOME sometimes gets remapped with electron
+        env = os.environ.copy()
+        env["KACHERY_CLOUD_DIR"] = kcl.get_kachery_cloud_dir()
+
+        retcode = subprocess.run(cmd.split(' '), env=env, check=True).returncode
+        if retcode != 0:
+            print('Error running electron app. Is figurl-electron installed?')
 
 def _parse_url(url: str):
     query = {}
