@@ -61,25 +61,26 @@ class Figure:
             return url
         else:
             raise Exception('No self._view_url')
-    def electron(self, *, label: str, dev: bool=False):
+    def electron(self, *, label: str, listen_port: Union[int, None]=None):
         url = self.url(label=label, local=True) # important to use local
         query = _parse_url(url)
-        v = query['v']
-        d = query['d']
+        vv = query['v']
+        dd = query['d']
         label = query.get('label', '')
-        cmd = f'figurl-electron -d {d} -v {v}'
+        cmd = f'figurl-electron -d {dd} -v {vv}'
         if label:
             cmd = cmd + f' --label {label}'
-        if dev is True:
-            cmd = cmd + ' --dev'
+        if listen_port is not None:
+            cmd = cmd + f' --listenPort {listen_port}'
 
         # this is important because $HOME sometimes gets remapped with electron
         env = os.environ.copy()
         env["KACHERY_CLOUD_DIR"] = kcl.get_kachery_cloud_dir()
 
-        retcode = subprocess.run(cmd.split(' '), env=env, check=True).returncode
-        if retcode != 0:
-            print('Error running electron app. Is figurl-electron installed?')
+        # retcode = subprocess.run(cmd.split(' '), env=env, check=True).returncode
+        # if retcode != 0:
+        #     print('Error running electron app. Is figurl-electron installed?')
+        subprocess.Popen(cmd.split(' '), env=env)
 
 def _parse_url(url: str):
     query = {}
