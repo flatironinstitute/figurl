@@ -25,7 +25,7 @@ def _serialize(x, *, compress_npy=False, label: str=''):
         return [_serialize(val, compress_npy=compress_npy, label=f'{label}[{ii}]') for ii, val in enumerate(x)]
     elif isinstance(x, np.ndarray):
         # todo: worry about byte order here
-        if str(x.dtype) not in ['int16', 'int32', 'float32']:
+        if str(x.dtype) not in ['uint8', 'int16', 'int32', 'float32']:
             raise Exception(f'Unable to serialize numpy array with dtype {str(x.dtype)}: {label}')
         ret = {
             '_type': 'ndarray',
