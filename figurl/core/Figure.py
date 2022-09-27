@@ -7,9 +7,10 @@ import kachery_cloud as kcl
 from .serialize_wrapper import _serialize
 
 class Figure:
-    def __init__(self, *, data: Any, view_url: Union[str, None]=None, access_group: Union[str, None]=None):
+    def __init__(self, *, data: Any, view_url: Union[str, None]=None, access_group: Union[str, None]=None, state: Union[dict, None]=None):
         self._view_url = view_url
         self._data = data
+        self._state = state
         self._serialized_data = _serialize(self._data, compress_npy=True)
         self._access_group = access_group
 
@@ -33,9 +34,14 @@ class Figure:
     @property
     def data(self):
         return self._data
+    @property
+    def state(self):
+        return self._state
     def set_data(self, data: Any):
         self._data = data
         self._serialized_data = _serialize(data, compress_npy=True)
+    def set_state(self, state: Union[dict, None]):
+        self._state = state
     def url(self, *, label: str, project_id: Union[str, None]=None, base_url: Union[str, None]=None, view_url: Union[str, None] = None, hide_app_bar: bool=False, local: bool=False):
         if base_url is None:
             base_url = default_base_url
@@ -55,6 +61,11 @@ class Figure:
                 url += f'&project={project_id}'
             if hide_app_bar:
                 url += '&hide=1'
+            if self._state is not None:
+                import simplejson
+                state_json = simplejson.dumps(self._state, separators=(',', ':'), indent=None, allow_nan=False, sort_keys=True)
+                # url += f'&s={_enc(state_json)}'
+                url += f'&s={state_json}'
             url += f'&label={_enc(label)}'
             if local:
                 url += '&local=1'
