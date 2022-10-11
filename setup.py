@@ -7,6 +7,6 @@ setup(
     install_requires=[
         'click',
         'altair',
-        'kachery_cloud>=0.2.1'
+        'kachery_cloud>=0.2.11'
     ]
 )
