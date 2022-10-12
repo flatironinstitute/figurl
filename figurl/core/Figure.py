@@ -14,6 +14,9 @@ class Figure:
         self._serialized_data = _serialize(self._data, compress_npy=True)
         self._access_group = access_group
 
+        if state is not None:
+            print('DEPRECATION WARNING: pass state parameter into url() rather than constructor for figurl Figure')
+
         # check up front whether figure data is too large
         max_data_size = 500 * 1000 * 1000
         data_size = len(json.dumps(self._serialized_data))
@@ -42,9 +45,11 @@ class Figure:
         self._serialized_data = _serialize(data, compress_npy=True)
     def set_state(self, state: Union[dict, None]):
         self._state = state
-    def url(self, *, label: str, project_id: Union[str, None]=None, base_url: Union[str, None]=None, view_url: Union[str, None] = None, hide_app_bar: bool=False, local: bool=False):
+    def url(self, *, label: str, project_id: Union[str, None]=None, base_url: Union[str, None]=None, view_url: Union[str, None] = None, hide_app_bar: bool=False, local: bool=False, state: Union[None, dict]=None):
         if base_url is None:
             base_url = default_base_url
+        if state is not None:
+            self._state = state
         if self._view_url is not None: # new system:
             # if self._data_uri is None:
             #     self._data_uri = kc.store_json(self._serialized_data)
