@@ -9,7 +9,6 @@ datasets in the cloud.
 * [Examples](#examples)
   - [Static plot](#example-static-plot)
   - [Report](#example-report)
-  - [Log table](#example-log-table)
   - [SortingView](#example-sortingview)
   - [Multi-trial spike train viewer](#example-multi-trial-spike-train-viewer)
   - [Multi-panel timeseries](#example-multi-panel-timeseries)
@@ -21,9 +20,6 @@ datasets in the cloud.
   - [Shareable links](#shareable-links)
   - [Content addressable storage](#content-addressable-storage)
   - [Visualization plugins](#visualization-plugins)
-* [Advanced capabilities](#advanced-capabilities)
-  - [Live feeds](#live-feeds)
-  - [Task backends](#task-backends)
 * [Creating a visualization plugin](#creating-a-visualization-plugin)
 * [Using your own cloud storage](#using-your-own-cloud-storage)
 
@@ -63,10 +59,6 @@ The Figurl web app ([figurl.org](https://figurl.org)) pairs the data with the vi
 * Handles advanced capabilities of the figure
   - User login (e.g., for curation)
   - Lazy loading of additional data objects
-  - Live feeds (for real-time updates or curation)
-  - Task backends (for on-demand computation)
-
-An optional backend service can be run in order to provide on-demand calculations and interacting with other advanced features of kachery-cloud such as live feeds.
 
 ## Examples
 
@@ -114,62 +106,13 @@ Here's an [example report](https://www.figurl.org/f?v=gs://figurl/figurl-report&
 
 [![image](https://user-images.githubusercontent.com/3679296/174073376-8eea5e6d-fba0-4461-bd37-bd49258ac54a.png)](https://www.figurl.org/f?v=gs://figurl/figurl-report&d=ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe&label=FINUFFT%20benchmark)
 
-### Example: Log table
-
-This example shows how a figurl figure can update based on a live feed. This is useful for monitoring a lengthy computation or a live acquisition in real time.
-
-```python
-import time
-import json
-from datetime import datetime
-import figurl as fig
-import kachery_cloud as kcl
-
-
-# Create a live feed
-feed = kcl.create_feed()
-
-# Create the LogTable figure and define the columns
-X = fig.LogTable(feed)
-X.add_column(key='iteration', label='Iteration')
-X.add_column(key='timestamp', label='Timestamp')
-X.add_column(key='text', label='Text')
-X.add_column(key='data', label='Data')
-
-# Print the figURL
-url = X.url(label='Example logtable')
-print(url)
-
-# Add an iteration every few seconds (press Ctrl+C to terminate)
-iteration = 1
-while True:
-    print(f'Appending message {iteration}')
-    data = {
-        'x': iteration,
-        'y': iteration * iteration
-    }
-    feed.append_message({
-        'iteration': iteration,
-        'timestamp': f'{datetime.now()}',
-        'text': f'Text for iteration {iteration}',
-        'data': json.dumps(data)
-    })
-    iteration = iteration + 1
-    time.sleep(5)
-
-# Output:
-# https://figurl.org/f?v=gs://figurl/logtable-1&d=sha1://fe780faacc5e9b74e4b26c3058a41ff24823a0e7&label=Example%20logtable
-```
-
-This example script can be [found here](../examples/logtable.py) and the [output figure is here](https://figurl.org/f?v=gs://figurl/logtable-1&d=sha1://fe780faacc5e9b74e4b26c3058a41ff24823a0e7&label=Example%20logtable). The script that generated this figure has already completed, so you won't see it updating in real time unless you run the script again yourself.
-
 ### Example: SortingView
 
 The real power of figurl is the opportunity for domain-specific custom visualizations.
 
 [SortingView](https://github.com/magland/sortingview) is built on figurl and allows users to view, curate, and share results of electrophysiological spike sorting in the browser. [Here is an example](https://www.figurl.org/f?v=gs://figurl/spikesortingview-4&d=sha1://a482c1e3c5575c8b9b27d12fedabc57266b378c0&project=lqhzprbdrq&label=Test%20workspace) figure that displays the output of spike sorting on a small simulated ephys dataset. Click the buttons in the upper-left corner to launch the various synchronized views. You can drag tabs between the top and bottom view areas.
 
-This visualization also facilitates manual curation: labeling and merging of neural units. Each curation action is appended to a live feed hosted in the cloud. If two users are viewing the same SortingView figure, they will be able to collaborate on the curation and see live updates in real time. You need to be logged in as an authorized user to perform the curation.
+This visualization also facilitates manual curation: labeling and merging of neural units.
 
 [![image](https://user-images.githubusercontent.com/3679296/174078633-5672c3ed-e7ba-41c5-9506-739b9a146e63.png)](https://www.figurl.org/f?v=gs://figurl/spikesortingview-4&d=sha1://a482c1e3c5575c8b9b27d12fedabc57266b378c0&project=lqhzprbdrq&label=Test%20workspace)
 
@@ -316,33 +259,16 @@ While kachery-cloud and figurl can use IPFS for content-addressable storage, the
 
 ### Visualization plugins
 
-The figurl web app (https://figurl.org) pairs the data object defined by the `d` query parameter in the figURL with the visualization plugin (`v` query parameter). The visualization plugin is a static HTML bundle, containing all the html and javascript files that have been compiled down from the ReactJS/typescript application. You can think of it as a binary executable that gets downloaded and executed by the web browser. The figurl web app loads the plugin into an embedded iframe and manages the interaction between the plugin and the kachery-cloud network (authentication, file downloads, live feeds, computation tasks, etc).
+The figurl web app (https://figurl.org) pairs the data object defined by the `d` query parameter in the figURL with the visualization plugin (`v` query parameter). The visualization plugin is a static HTML bundle, containing all the html and javascript files that have been compiled down from the ReactJS/typescript application. You can think of it as a binary executable that gets downloaded and executed by the web browser. The figurl web app loads the plugin into an embedded iframe and manages the interaction between the plugin and the kachery-cloud network (authentication, file downloads, etc).
 
 Usually the visualization plugin is hosted on a cloud storage bucket. For example, in the Altair plot of the basic example, it is hosted at `gs://figurl/vegalite-2` which is on a Google bucket. Note the `-2` at the end of this URI. If we want to make backward-compatible updates to the visualization that do not break any existing links (improve the layout, add features, etc), then we can just upload the new HTML bundle to that same location. However, if we want to make changes that break existing links (e.g., data spec adjustments), then we can increment that version number, upload the new bundle to `gs://figurl/vegalite-3`, and point future figURLs to the new location.
 
-Visualization plugins are simply static websites that are embedded in the parent figurl.org web app. This is a big simplication compared with traditional websites that usually require a running server that provides a working API. The real work is performed by the parent figurl.org web application. This design is what allows us to store visualization plugins on storage buckets for long-term availability which is crucial for allowing figURLs to stay valid even as the visualization plugins are updated and improved over time.
-
-## Advanced capabilities
-
-### Live feeds
-
-In addition to loading files that have been stored in kachery-cloud, visualizations can make use of live feeds. This is useful for viewing an ongoing process in real time, or for allowing the user to write to an append-only log (e.g., manual curation of a dataset).
-
-This section needs to be finished.
-
-### Task backends
-
-It is not always possible or practical to precompute all data needed for a given visualization. Kachery-cloud task backends provide a means for computing data objects on demand based on user interactions.
-
-This section needs to be finished.
+Visualization plugins are simply static websites that are embedded in the parent figurl.org web app. This is a big simplification compared with traditional websites that usually require a running server that provides a working API. The real work is performed by the parent figurl.org web application. This design is what allows us to store visualization plugins on storage buckets for long-term availability which is crucial for allowing figURLs to stay valid even as the visualization plugins are updated and improved over time.
 
 ## Creating a visualization plugin
 
-This section needs to be written. For now, take a look at this template project which can be modified to build a custom visualization for figurl.
+This section needs to be written. Contact us for more information on creating your own Figurl visualization plugin.
 
 ## Using your own cloud storage
 
-By default, figurl will use our inexpensive cloud storage, and your data is not guaranteed to be available forever. However, it is also possible to configure your own cloud storage provider, which you pay for. This configuration is available in the web app at the time you configure your kachery-cloud client. We support Google, AWS, Wasabi and Filebase buckets. For more information see the [kachery-cloud documentation](https://github.com/flatironinstitute/kachery-cloud).
-
-https://github.com/scratchrealm/figurl-visualization-template
-
+By default, your data files will be stored using our cloud resources, and they are not guaranteed to be available forever. You can also configure figurl to use your own storage buckets. Contact us if you are interested in hosting data using your own resources.

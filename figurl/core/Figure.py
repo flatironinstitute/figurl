@@ -72,6 +72,9 @@ class Figure:
                 # url += f'&s={_enc(state_json)}'
                 url += f'&s={state_json}'
             url += f'&label={_enc(label)}'
+            zone_name = os.getenv('KACHERY_ZONE', None)
+            if zone_name is not None:
+                url += f'&zone={zone_name}'
             if local:
                 url += '&local=1'
             return url

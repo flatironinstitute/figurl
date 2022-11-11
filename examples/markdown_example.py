@@ -18,3 +18,6 @@ print(url)
 
 url = fig.Markdown(source=source).url(label='Example markdown')
 print(url)
+
+# Output:
+# https://figurl.org/f?v=gs://figurl/markdown-1&d=sha1://9fe1d643f883e1676f70082b679c8a825b879041&label=Example%20markdown
