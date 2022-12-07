@@ -21,7 +21,7 @@ Configure your [kachery-cloud](https://github.com/flatironinstitute/kachery-clou
 
 ```bash
 kachery-cloud-init
-# follow the instructions to associate your client with your Google user name on kachery-cloud
+# follow the instructions to associate your client with your GitHub user name on kachery-cloud
 ```
 
 ## Static examples
@@ -51,7 +51,7 @@ For examples of interactive figures, see [intro to Figurl](./doc/intro.md).
 
 ## Cloud storage
 
-By default, your data files will be stored using our cloud resources, and they are not guaranteed to be available forever. You can also configure figurl to use your own storage buckets. Contact us if you are interested in hosting data using your own resources.
+By default, your data files will be stored using our cloud resources, and they are not guaranteed to be available forever. You can also configure figurl to use your own resources by [creating a Kachery zone](https://github.com/flatironinstitute/kachery-cloud/blob/main/doc/create_kachery_zone.md).
 
 ## Contributing
 
