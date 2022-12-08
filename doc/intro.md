@@ -181,61 +181,55 @@ Here's an example of [60 seconds of Neuropixels raw data](https://www.figurl.org
 
 ### Shareable links
 
-The shareable link is perhaps the most portable, versatile, archiveable and robust method for sharing data, depending of course on the reliability and permanence of the content providing service. Because URLs are relatively short strings of text, they can be emailed, texted, uploaded to a database, or posted just about anywhere. As compared to working with files, URL links take up far less disk space, do not require special software for reading, and can be opened/launched from wherever they are found. Furthermore, assuming the backing resource is a reliable archive, they can even be embedded in publications or long-term archives.
+The shareable link is one of the most convenient and reliable ways to share information. With their brief and concise code, URLs can be sent via email, text, stored in databases or shared anywhere else. Additionally, links occupy far less storage space than conventional figures, don't need special programs to access them and can be opened from any location with internet access. What's more, if the content's source is a reliable archive, URLs can even be added to publications or kept in permanent storage.
 
-Traditional software for scientific visualization does not produce such shareable URLs, but instead typically produces files that are either in common formats (pdf, png, svg) or in formats specific to certain software programs that must be installed and configured. Often, these software packages do not produce files at all, but interface directly with running processes. These factors limit where and how such software can be used. For example, some plotting libraries only work within Jupyter notebooks, or must be differently configured to operate in other settings. Cloud processes that run as part of continuous integration systems are limited in terms of how they can interact with external systems, and visualizations generated as outputs are typically not readily consumable.
+Traditional software programs used for scientific visualization generally produce files rather than URLs. These files can be in well-known (non-interactive) formats (such as pdf, png, or svg), or in formats specific to a particular application, requiring installation and configuration. In some cases, no files are created at all, and the software simply interacts with an existing process. This makes it difficult to use the software in various locations and settings; for example, some plotting libraries work only in Jupyter notebooks, and need to be adjusted for other settings. Cloud-based processes as part of continuous integration systems also have limited interaction with external systems, and the visualization files they generate are not always easy to obtain or open.
 
-In addition to the convenience and versatility of figURL links, web-based visualization software generally offers many advantages compared with desktop tools. The main advantage is that the web browser is inherently platform-independent, available on all desktop operating systems as well as on mobile devices. Another advantage is that web applications can be automatically upgraded without any action on the user's part. Other advantages relate to authentication, collaboration, and integration with cloud systems. While desktop software has some advantages in terms of performance and access to local on-disk datasets, for most applications, browser-based and cloud-based visualization tools are the most convenient for the end user and provide the greatest opportunities for integration and collaboration.
+Besides the flexibility and ease of use of figURL links, web-based visualizing programs offer a variety of advantages when compared to desktop tools. The primary benefit is that web browsers are compatible across all desktop and mobile operating systems. Additionally, web applications can be updated without any input from the user. Other advantages include authentication, teamwork, and integration with cloud systems. While desktop software provides some advantages in terms of access to local data, in most cases, browser-based and cloud-based visualization tools are the most practical for a user and provide the greatest chances of collaboration and integration.
 
 ### Content-addressable storage
 
 Figurl stores data in kachery-cloud which uses content-addressible URIs for locating files. Here is an example of a URI that points to a chunk of data in JSON format:
 
 ```
-ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe
+sha1://21df8ad1fd24b9d9ad112b70de5cd5f7cd67d2a8
 ```
 
-The string of characters is a content hash that uniquely points to the underlying file, like a fingerprint. The assumption is that no two files exist with the same content hash. This URI therefore points to the file by content and not by location. This is important for creating figURLs because we may want to move data around or change how it is accessed without invalidating URLs that have already been distributed or stored in a database. Here is a pointer to a figure that points to the above file as the `d` parameter in the query string:
+The string of characters is a content hash that uniquely points to the underlying file, like a fingerprint. The assumption is that no two files exist with the same content hash. This URI therefore points to the file by content and not by location. This is important for creating figURLs because we may want to move data around or change how it is accessed without invalidating URLs that have already been distributed or stored in a database. Here is a pointer to a figure that uses the above file as the `d` parameter in the query string:
 
-https://www.figurl.org/f?v=gs://figurl/figurl-report&d=ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe&label=FINUFFT%20benchmark
+https://www.figurl.org/f?v=gs://figurl/figurl-report&d=sha1://21df8ad1fd24b9d9ad112b70de5cd5f7cd67d2a8&label=FINUFFT%20benchmark
 
-It is also possible to retrieve that chunk of data directly from an [IPFS](https://ipfs.io/) gateway (assuming it still lives on the IPFS network):
-
-https://ipfs.io/ipfs/bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe
-
-Or we can retrieve it using the [kachery-cloud](https://github.com/flatironinstitute/kachery-cloud) command-line utility:
+It is also possible to retrieve that chunk of data directly from Kachery cloud using the Python or command-line interface:
 
 ```bash
-kachery-cloud-cat ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe
+kachery-cloud-cat sha1://21df8ad1fd24b9d9ad112b70de5cd5f7cd67d2a8
 ```
-
-or from Python
 
 ```python
 import kachery_cloud as kcl
 
-a = kcl.load_json('ipfs://bafkreicjsyiqyg5wy6e5cddf2tufxtzbegmitwsj4v3fkqtilzz4slojhe')
+a = kcl.load_json('sha1://21df8ad1fd24b9d9ad112b70de5cd5f7cd67d2a8')
 print(a)
 ```
 
-Since we do not rely on any location-specific information to retrieve the file, we are free to change how and where we store the underlying data without invalidating the link. For example, if we want to publish the visualization via figURL, we could move the data to a long-term archival system.
+Since we do not use location-specific data to access the file, we can shift where and how the data is kept without invalidating the link. For instance, if we decide to publish the visualization, we could transfer the data to a long-term storage system. The link would stay the same.
 
-Another advantage of using content hashes is that we have a means of verifying the integrity of the data file. When the file is downloaded, figurl (and kachery-cloud client) can check whether the content hash matches the URI.
+Another advantage of employing content hashes is that we have the ability to validate the accuracy of the data file. When the file is obtained, figurl (and the Kachery client) can verify whether the content hash corresponds to the URI.
 
-While kachery-cloud and figurl can use IPFS for content-addressable storage, there are some disadvantages of relying on that distributed network. Therefore, the default is to use `sha1://` URIs instead, as can be seen in most of the above examples. While files are referenced via content URIs, the underlying data is usually stored in a cloud bucket (Google, AWS, Wasabi, or Filebase).
+TODO: talk about why we don't use IPFS
 
 ### Visualization plugins
 
 The figurl web app (https://figurl.org) pairs the data object defined by the `d` query parameter in the figURL with the visualization plugin (`v` query parameter). The visualization plugin is a static HTML bundle, containing all the html and javascript files that have been compiled down from the ReactJS/typescript application. You can think of it as a binary executable that gets downloaded and executed by the web browser. The figurl web app loads the plugin into an embedded iframe and manages the interaction between the plugin and the kachery-cloud network (authentication, file downloads, etc).
 
-Usually the visualization plugin is hosted on a cloud storage bucket. For example, in the Altair plot of the basic example, it is hosted at `gs://figurl/vegalite-2` which is on a Google bucket. Note the `-2` at the end of this URI. If we want to make backward-compatible updates to the visualization that do not break any existing links (improve the layout, add features, etc), then we can just upload the new HTML bundle to that same location. However, if we want to make changes that break existing links (e.g., data spec adjustments), then we can increment that version number, upload the new bundle to `gs://figurl/vegalite-3`, and point future figURLs to the new location.
+Usually the visualization plugin is hosted on a cloud storage bucket. For example, in the Altair plot of the basic example, it is found at `gs://figurl/vegalite-2` on a Google bucket (note the `-2` at the end of the URI). If we want to make updates to the visualization that will not affect existing links (improve the layout, add features, etc.), then the new HTML bundle can be uploaded to the same place. However, if the changes made will break existing links (e.g., data spec adjustments), then the version number should be incremented, the new bundle uploaded to `gs://figurl/vegalite-3`, and all future figURLs pointed to the new location.
 
 Visualization plugins are simply static websites that are embedded in the parent figurl.org web app. This is a big simplification compared with traditional websites that usually require a running server that provides a working API. The real work is performed by the parent figurl.org web application. This design is what allows us to store visualization plugins on storage buckets for long-term availability which is crucial for allowing figURLs to stay valid even as the visualization plugins are updated and improved over time.
 
 ## Creating a visualization plugin
 
-This section needs to be written. Contact us for more information on creating your own Figurl visualization plugin.
+TODO: This section needs to be written. Contact us for more information on creating your own Figurl visualization plugin.
 
 ## Using your own cloud storage
 
-By default, your data files will be stored using our cloud resources, and they are not guaranteed to be available forever. You can also configure figurl to use your own storage buckets. Contact us if you are interested in hosting data using your own resources.
+By default, your data files will be stored using our cloud resources, and they are not guaranteed to be available forever. You can also configure figurl to use your own storage buckets by [creating a Kachery zone](https://github.com/flatironinstitute/kachery-cloud/blob/main/doc/create_kachery_zone.md).
