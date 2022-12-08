@@ -6,6 +6,8 @@
 
 Figurl is a framework for creating browser-based, shareable, interactive views of scientific datasets in the cloud. It is designed to be used in collaborative environments, such as scientific research teams, and is built on top of [Kachery cloud](https://github.com/flatironinstitute/kachery-cloud).
 
+[Introduction to Figurl](./doc/intro.md)
+
 ## Installation and setup
 
 > Note: most of the time, you will be using a different Python package that includes figurl as a dependency. But you can also install figurl directly and use the basic static functionality (Altair charts, markdown documents, reports).
