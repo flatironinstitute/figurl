@@ -60,6 +60,10 @@ By default, your data files will be stored using our cloud resources, and they a
 * Provide feedback
 * Contact us if you would like to help develop and maintain this open source project
 
+## For developers
+
+[Embedded figure protocol](./doc/embedded_figure_protocol.md)
+
 ## Authors
 
 Jeremy Magland and Jeff Soules, [Center for Computational Mathematics, Flatiron Institute](https://www.simonsfoundation.org/flatiron/center-for-computational-mathematics)
