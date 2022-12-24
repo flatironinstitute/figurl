@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Figurl zenodo example</title>
+<script>
+    async function httpGetAsync(url) {
+        return new Promise((resolve, reject) => {
+            const xmlHttp = new XMLHttpRequest()
+            xmlHttp.onreadystatechange = () => { 
+                if (xmlHttp.readyState == 4) {
+                    if (xmlHttp.status == 200) {
+                        resolve(xmlHttp.responseText)
+                    }
+                    else {
+                        reject(`Problem getting ${url}: status ${xmlHttp.status}`)
+                    }
+                }
+            }
+            xmlHttp.open("GET", url, true) // true for asynchronous
+            xmlHttp.send(null)
+        })
+    }
+    async function getZenodoDownloadUrl(recordId, fileName, onProgress, o) {
+        console.info(`Zenodo: ${recordId}/${fileName}`)
+        const url1 = `https://${o.sandbox ? 'sandbox.zenodo.org' : 'zenodo.org'}/api/records/${recordId}`
+        const tt = await httpGetAsync(url1)
+        const resp = JSON.parse(tt)
+        if (!resp.files) throw Error('Error getting zenodo record json')
+        const aa = resp['files'].filter((f) => (f.filename === fileName))[0]
+        if (!aa) throw Error(`File not found in zenodo record: ${fileName}`)
+        const url = (aa['links'] || {})['download']
+        if (!url) throw Error(`Url link not found in zenodo record: ${fileName}`)
+        return url
+    }
+    async function zenodoDownload(recordId, fileName, onProgress, o) {
+        const url = await getZenodoDownloadUrl(recordId, fileName, onProgress, o)
+        return await httpGetAsync(url)
+    }
+    async function loadZenodoFile(uri) {
+        const a = uri.split('?')[0].split('/')
+        const recordId = a[2]
+        const fileName = a.slice(3).join('/')
+        const onProgress = () => {}
+        const content = await zenodoDownload(recordId, fileName, onProgress, {sandbox: uri.startsWith('zenodo-sandbox://')})
+        return content
+    }
+    async function deserializeReturnValue(x) {
+        if (!x) return x
+        else if (typeof (x) === 'object') {
+            if (Array.isArray(x)) {
+                const ret = []
+                for (let a of x) {
+                    ret.push(await deserializeReturnValue(a))
+                }
+                return ret
+            }
+            else if (x._type === 'ndarray') {
+                const shape = x.shape
+                const dtype = x.dtype
+                let dataBuffer
+                if (x.data_b64) {
+                    const data_b64 = x.data_b64
+                    dataBuffer = _base64ToArrayBuffer(data_b64)
+                    // dataBuffer = Buffer.from(data_b64, 'base64')
+                }
+                else if (x.data_gzip_b64) {
+                    const data_gzip_b64 = x.data_gzip_b64
+                    const aa = _base64ToArrayBuffer(data_gzip_b64)
+                    // const aa = Buffer.from(data_gzip_b64, 'base64')
+                    dataBuffer = gunzip(aa)
+                }
+                else {
+                    throw Error('Missing data_b64 or data_gzip_b64')
+                }
+                // const data_b64 = x.data_b64 as string
+                // const dataBuffer = _base64ToArrayBuffer(data_b64)
+                if (dtype === 'float32') {
+                    return applyShape(new Float32Array(dataBuffer.buffer), shape)
+                }
+                else if (dtype === 'int32') {
+                    return applyShape(new Int32Array(dataBuffer.buffer), shape)
+                }
+                else if (dtype === 'int16') {
+                    return applyShape(new Int16Array(dataBuffer.buffer), shape)
+                }
+                else if (dtype === 'uint8') {
+                    return applyShape(new Uint8Array(dataBuffer.buffer), shape)
+                }
+                else if (dtype === 'uint32') {
+                    return applyShape(new Uint32Array(dataBuffer.buffer), shape)
+                }
+                else if (dtype === 'uint16') {
+                    return applyShape(new Uint16Array(dataBuffer.buffer), shape)
+                }
+                else if (dtype === 'float64') {
+                    if (shapeProduct(shape) > 100) {
+                        console.info('WARNING: Using float64 array. It may be a good idea to cast the array to float32 if you do not need the full precision', shape)
+                    }
+                    return applyShape(new Float64Array(dataBuffer.buffer), shape)
+                }
+                else {
+                    throw Error(`Datatype not yet implemented for ndarray: ${dtype}`)
+                }
+            }
+            else {
+                const ret = {}
+                for (let k in x) {
+                    ret[k] = await deserializeReturnValue(x[k])
+                }
+                return ret
+            }
+        }
+        else return x
+    }
+    function _base64ToArrayBuffer(base64) {
+        var binary_string = window.atob(base64)
+        var bytes = new Uint8Array(binary_string.length)
+        for (var i = 0; i < binary_string.length; i++) {
+            bytes[i] = binary_string.charCodeAt(i)
+        }
+        return bytes
+    }
+    function shapeProduct(shape) {
+        let ret = 1
+        for (let a of shape) ret *= a
+        return ret
+    }
+    function gunzip(x) {
+        throw Error('Gunzip has been disabled for this example. For figures that require gunzip, we will need to bundle in the pako javascript source.')
+        return pako.inflate(x)
+    }
+    function applyShape(x, shape) {
+        if (shape.length === 1) {
+            if (shape[0] !== x.length) throw Error('Unexpected length of array')
+            return Array.from(x)
+        }
+        else if (shape.length === 2) {
+            const n1 = shape[0]
+            const n2 = shape[1]
+            if (n1 * n2 !== x.length) throw Error(`Unexpected length of array ${n1} x ${n2} <> ${x.length}`)
+            const ret = []
+            for (let i1 = 0; i1 < n1; i1++) {
+                ret.push(Array.from(x.slice(i1 * n2, (i1 + 1) * n2)))
+            }
+            return ret
+        }
+        else if (shape.length === 3) {
+            const n1 = shape[0]
+            const n2 = shape[1]
+            const n3 = shape[2]
+            if (n1 * n2 * n3 !== x.length) throw Error('Unexpected length of array')
+            const ret = []
+            for (let i1 = 0; i1 < n1; i1++) {
+                const A = []
+                for (let i2 = 0; i2 < n2; i2++) {
+                    A.push(Array.from(x.slice(i1 * n2 * n3 + i2 * n3, i1 * n2 * n3 + ( i2 + 1 ) * n3)))
+                }
+                ret.push(A)
+            }
+            return ret
+        }
+        else if (shape.length === 4) {
+            const n1 = shape[0]
+            const n2 = shape[1]
+            const n3 = shape[2]
+            const n4 = shape[3]
+            if (n1 * n2 * n3 * n4 !== x.length) throw Error('Unexpected length of array')
+            const ret = []
+            for (let i1 = 0; i1 < n1; i1++) {
+                const A = []
+                for (let i2 = 0; i2 < n2; i2++) {
+                    const B = []
+                    for (let i3 = 0; i3 < n3; i3++) {
+                        B.push(Array.from(x.slice(i1 * n2 * n3 * n4 + i2 * n3 * n4 + i3 * n4, i1 * n2 * n3 * n4 + i2 * n3 * n4 + ( i3 + 1 ) * n4)))
+                    }
+                    A.push(B)
+                }
+                ret.push(A)
+            }
+            return ret
+        }
+        else if (shape.length === 5) {
+            const n1 = shape[0]
+            const n2 = shape[1]
+            const n3 = shape[2]
+            const n4 = shape[3]
+            const n5 = shape[4]
+            if (n1 * n2 * n3 * n4 * n5 !== x.length) throw Error('Unexpected length of array')
+            const ret = []
+            for (let i1 = 0; i1 < n1; i1++) {
+                const A = []
+                for (let i2 = 0; i2 < n2; i2++) {
+                    const B = []
+                    for (let i3 = 0; i3 < n3; i3++) {
+                        const C = []
+                        for (let i4 = 0; i4 < n4; i4++) {
+                            C.push(Array.from(x.slice(i1 * n2 * n3 * n4 * n5 + i2 * n3 * n4 * n5 + i3 * n4 * n5 + i4 * n5, i1 * n2 * n3 * n4 * n5 + i2 * n3 * n4 * n5 + i3 * n4 * n5 + (i4 + 1) * n5)))
+                        }
+                        B.push(C)
+                    }
+                    A.push(B)
+                }
+                ret.push(A)
+            }
+            return ret
+        }
+        else {
+            throw Error('Not yet implemented')
+        }
+    }
+</script>
+<script>
+async function main() {
+    const iframe = document.querySelector('#main')
+    const uri = 'zenodo-sandbox://1139693/index.html'
+    const html = await loadZenodoFile(uri)
+    async function handleRequest(req) {
+        if (req.type === 'getFigureData') {
+            const a = await loadZenodoFile('zenodo://7195410/main')
+            const figureData = await deserializeReturnValue(JSON.parse(a))
+            return {
+                type: 'getFigureData',
+                figureData
+            }
+        }
+        else if (req.type === 'getFileData') {
+            const a = await loadZenodoFile(req.uri)
+            const rt = req.responseType || 'json-deserialized'
+            let fileData
+            if (rt === 'json-deserialized') {
+                fileData = await deserializeReturnValue(JSON.parse(a))
+            }
+            else if (rt === 'json') {
+                fileData = JSON.parse(a)
+            }
+            else {
+                fileData = a
+            }
+            return {
+                type: 'getFileData',
+                fileData
+            }
+        }
+        else return undefined
+    }
+    window.addEventListener('message', (e) => {
+        const msg = e.data
+        if (msg.type === 'figurlRequest') {
+            handleRequest(msg.request || {}).then(resp => {
+                if (resp) {
+                    const respmsg = {
+                        type: 'figurlResponse',
+                        requestId: msg.requestId,
+                        response: resp
+                    }
+                    console.log('---', respmsg)
+                    iframe.contentWindow.postMessage(respmsg, '*')
+                }
+            })
+        }
+    })
+    iframe.onload = () => {
+        const msg = {
+            type: 'initializeFigure',
+            parentOrigin: '*',
+            figureId: 'the-figure',
+            s: undefined
+        }
+        iframe.contentWindow.postMessage(msg, '*')
+    }
+    iframe.srcdoc = html
+}
+document.addEventListener('DOMContentLoaded', () => {
+    main()
+})
+</script>
+</head>
+<body style="margin:0px;padding:0px;overflow:hidden">
+    <iframe
+        id="main"
+        sandbox="allow-scripts"
+        width="100%"
+        height="100%"
+        style="width:100%;height:100vh;overflow:hidden;"
+    ></iframe>
+</body>
+</html>

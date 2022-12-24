@@ -23,19 +23,19 @@ const figureId = '<random-figure-id>'
 
 Method 2:
 ```html
-<iframe srcdoc="<html_source>">
+<iframe sandbox="allow-scripts" srcdoc="<html_source>">
 ```
 
-where the html source is obtained from downloading the content at the view URI.
+where the html source is obtained from downloading the content at the view URI. Note the sandbox attribute should be used for security reasons, giving minimal permissions to the child window. For example, we don't want the child window to access the parent's DOM or the parent's local storage.
 
-For method 2, a message is immediately posted to the iframe as follows:
+For method 2, a message is posted immediately after iframe.onload to the iframe as follows:
 
 ```typescript
 const msg = {
-    type: 'initiateFigure',
-    parentOrigin: '**',
+    type: 'initializeFigure',
+    parentOrigin: '*',
     figureId: '<figure_id>',
-    s?: <url_state>
+    s?: <url_state_string>
 }
 iframe.postMessage(msg, '*')
 ```
