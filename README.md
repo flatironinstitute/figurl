@@ -2,11 +2,13 @@
 
 # figurl
 
-> **IMPORTANT**: This package is intended for collaborative sharing of data for scientific research. It should not be used for other purposes. At this point, uploaded files are not guaranteed to be available for ever. Contact us if you are interested storing files using your own cloud resources.
-
 Figurl is a framework for creating browser-based, shareable, interactive views of scientific datasets in the cloud. It is designed to be used in collaborative environments, such as scientific research teams, and is built on top of [Kachery cloud](https://github.com/flatironinstitute/kachery-cloud).
 
 [Introduction to Figurl](./doc/intro.md)
+
+[Gallery of examples](https://magland.github.io/figurl-gallery-viewer/)
+
+> This package is intended for collaborative sharing of data for scientific research. It should not be used for other purposes. At this point, uploaded files are not guaranteed to be available for ever. Contact us if you are interested storing files using your own cloud resources.
 
 ## Installation and setup
 
