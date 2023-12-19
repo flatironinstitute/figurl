@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Preserved figurl figure</title>
+</head>
+
+<body>
+    <div style="position: absolute; width: 100%; height: 100%; overflow: hidden;">
+        <!-- Full size iframe -->
+        <iframe id="figurl-iframe" style="position: absolute; width: 100%; height: 100%; border: none;"></iframe>
+    </div>
+    <script type="text/javascript">
+        const figureId = getRandomId(10);
+        const iframe = document.getElementById('figurl-iframe');
+        iframe.src = 'view/index.html';
+        iframe.onload = () => {
+            initialize();
+        }
+        function initialize() {
+            const parentOrigin = window.location.protocol + '//' + window.location.host;
+            const s = {};
+            iframe.contentWindow.postMessage({ type: 'initializeFigure', parentOrigin, figureId, s }, '*');
+        }
+        function getRandomId(length) {
+            const choices = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            return Array(length).fill(0).map(() => choices[Math.floor(Math.random() * choices.length)]).join('');
+        }
+        window.addEventListener('message', (evt) => {
+            const msg = evt.data;
+            if (msg.figureId !== figureId) return;
+            const figurlProtocolVersion = msg.request.figurlProtocolVersion;
+            if (figurlProtocolVersion !== 'p1') {
+                console.error(`Unexpected figurlProtocolVersion: ${figurlProtocolVersion}`);
+                return;
+            }
+            if (msg.request.type === 'getFigureData') {
+                handleGetFigureDataRequest(msg.request).then(response => {
+                    iframe.contentWindow.postMessage({
+                        type: 'figurlResponse',
+                        requestId: msg.requestId,
+                        response
+                    }, '*')
+                })
+            }
+            else if (msg.request.type === 'getFileData') {
+                handleGetFileDataRequest(msg.request).then(response => {
+                    iframe.contentWindow.postMessage({
+                        type: 'figurlResponse',
+                        requestId: msg.requestId,
+                        response
+                    }, '*')
+                })
+            }
+        });
+        async function handleGetFigureDataRequest(request) {
+            const r = await fetch('data/index.json');
+            const txt = await r.text();
+            const figureData = JSON.parse(txt);
+            const response = {
+                type: 'getFigureData',
+                figureData
+            }
+            return response;
+        }
+        async function handleGetFileDataRequest(request) {
+            const { uri, responseType, startByte, endByte } = request;
+            if (!uri.startsWith('sha1://')) {
+                throw Error(`Unexpected uri: ${uri}`);
+            }
+            const sha1 = uri.slice('sha1://'.length).split('?')[0];
+            const headers = {};
+            if (startByte !== undefined) {
+                headers['Range'] = `bytes=${startByte}-${endByte - 1}`; // apparently if "=" is not used, cloudflare struggles (gives CORS error)
+            }
+            const r = await fetch(`data/sha1/${sha1}`, { headers });
+            if (!r.ok) {
+                throw Error(r.statusText);
+            }
+            const data = await r.arrayBuffer();
+            let fileData
+            if (responseType === 'json') {
+                const dec = new TextDecoder('utf-8');
+                fileData = JSON.parse(dec.decode(data));
+            }
+            else if (responseType === 'text') {
+                const dec = new TextDecoder('utf-8');
+                fileData = dec.decode(data);
+            }
+            else if (responseType === 'binary') {
+                fileData = data;
+            }
+            else {
+                throw Error(`Unexpected responseType: ${responseType}`);
+            }
+            const response = {
+                type: 'getFileData',
+                fileData
+            }
+            return response;
+        }
+    </script>
+</body>
+
+</html>
