@@ -32,7 +32,7 @@ def preserve_figure(*, figurl_url: str, output_file: str):
         os.system(f'tar -czvf {output_file} -C {tmpdir} figure')
 
 def _copy_site_to_folder(site_url: str, folder: str):
-    manifest_url = site_url + '/file-manifest.txt'
+    manifest_url = f'{site_url}/file-manifest.txt'
     try:
         file_manifest_txt = _download_file_text(manifest_url)
     except:
@@ -41,13 +41,14 @@ def _copy_site_to_folder(site_url: str, folder: str):
         raise Exception('Unable to download file-manifest.txt')
     file_list = file_manifest_txt.split('\n')
     for f in file_list:
-        a = f.split('/')
-        for i in range(len(a) - 1):
-            dirpath = os.path.join(folder, *a[0:i + 1])
-            if not os.path.exists(dirpath):
-                os.mkdir(dirpath)
-        url = site_url + '/' + f
-        _download_file(url, os.path.join(folder, f))
+        if f:
+            a = f.split('/')
+            for i in range(len(a) - 1):
+                dirpath = os.path.join(folder, *a[0:i + 1])
+                if not os.path.exists(dirpath):
+                    os.mkdir(dirpath)
+            url = site_url + '/' + f
+            _download_file(url, os.path.join(folder, f))
 
 def _download_file_text(url: str):
     print(f'Downloading file: {url}')
@@ -153,3 +154,10 @@ def _view_uri_to_url(uri: str):
     if uri.startswith('npm://'):
         package_name, path = _parse_npm_uri(uri)
         return f'https://unpkg.com/{package_name}/{path}'
+    elif uri.startswith('gs://'):
+        p = uri[len('gs://'):]
+        return f'https://storage.googleapis.com/{p}'
+    elif uri.startswith('http://') or uri.startswith('https://'):
+        return uri
+    else:
+        raise Exception(f'Unexpected view uri: {uri}')
