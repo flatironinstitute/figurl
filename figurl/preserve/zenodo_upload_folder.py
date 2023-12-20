@@ -2,6 +2,8 @@ import os
 import requests
 
 
+# Maybe at some point we'll want to do this. But for now there is no use case for it.
+
 def zenodo_upload_folder(*,
     source_folder: str,
     record_id: str,
@@ -91,61 +93,3 @@ def _get_all_files_relpaths(source_folder: str):
             relpath = os.path.relpath(os.path.join(root, file), source_folder)
             all_files_relpaths.append(relpath)
     return all_files_relpaths
-
-# curl 'https://sandbox.zenodo.org/api/records/11269/draft/files' \
-#   -H 'Accept: application/json, text/plain, */*' \
-#   -H 'Accept-Language: en-US,en;q=0.9' \
-#   -H 'Connection: keep-alive' \
-#   -H 'Content-Type: application/json' \
-#   -H 'Cookie: 04f20c86f07421a9ec0f9d5ba4be544f=7705ef0ecdb4f5b5c6800bf05b654082; _pk_ref.365.3783=%5B%22%22%2C%22%22%2C1702996065%2C%22https%3A%2F%2Fwww.google.com%2F%22%5D; _pk_id.365.3783=780b7fd43e8700f2.1702996065.; _pk_ses.365.3783=1; session=9ac56bc971221ab3_6581a868.5zCyz__CQpDwgQASBqnEbDrL6FY; csrftoken=eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwMjk5NjA3MiwiZXhwIjoxNzAzMDgyNDcyfQ.IjVzdXhGdkZCcVlDYlJGVnJka2JROERmeFd1Vm0zNmNaIg.cw7nlIZ-cV3qvghFt6IuQaULZ-8s6gCu85zBee5OXJDRoSz179cMNd2LuoLB4Ic92EWR-Llt6H6xP_goU2AXsA' \
-#   -H 'Origin: https://sandbox.zenodo.org' \
-#   -H 'Referer: https://sandbox.zenodo.org/uploads/11269' \
-#   -H 'Sec-Fetch-Dest: empty' \
-#   -H 'Sec-Fetch-Mode: cors' \
-#   -H 'Sec-Fetch-Site: same-origin' \
-#   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36' \
-#   -H 'X-CSRFToken: eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwMjk5NjA3MiwiZXhwIjoxNzAzMDgyNDcyfQ.IjVzdXhGdkZCcVlDYlJGVnJka2JROERmeFd1Vm0zNmNaIg.cw7nlIZ-cV3qvghFt6IuQaULZ-8s6gCu85zBee5OXJDRoSz179cMNd2LuoLB4Ic92EWR-Llt6H6xP_goU2AXsA' \
-#   -H 'sec-ch-ua: "Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"' \
-#   -H 'sec-ch-ua-mobile: ?0' \
-#   -H 'sec-ch-ua-platform: "Linux"' \
-#   --data-raw '[{"key":"setup.py"}]' \
-#   --compressed
-
-# curl 'https://sandbox.zenodo.org/api/records/11269/draft/files/setup.py/content' \
-#   -X 'PUT' \
-#   -H 'Accept: application/json, text/plain, */*' \
-#   -H 'Accept-Language: en-US,en;q=0.9' \
-#   -H 'Connection: keep-alive' \
-#   -H 'Content-Length: 422' \
-#   -H 'Content-Type: application/octet-stream' \
-#   -H 'Cookie: 04f20c86f07421a9ec0f9d5ba4be544f=7705ef0ecdb4f5b5c6800bf05b654082; _pk_ref.365.3783=%5B%22%22%2C%22%22%2C1702996065%2C%22https%3A%2F%2Fwww.google.com%2F%22%5D; _pk_id.365.3783=780b7fd43e8700f2.1702996065.; _pk_ses.365.3783=1; session=9ac56bc971221ab3_6581a868.5zCyz__CQpDwgQASBqnEbDrL6FY; csrftoken=eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwMjk5NjA3MiwiZXhwIjoxNzAzMDgyNDcyfQ.IjVzdXhGdkZCcVlDYlJGVnJka2JROERmeFd1Vm0zNmNaIg.cw7nlIZ-cV3qvghFt6IuQaULZ-8s6gCu85zBee5OXJDRoSz179cMNd2LuoLB4Ic92EWR-Llt6H6xP_goU2AXsA' \
-#   -H 'Origin: https://sandbox.zenodo.org' \
-#   -H 'Referer: https://sandbox.zenodo.org/uploads/11269' \
-#   -H 'Sec-Fetch-Dest: empty' \
-#   -H 'Sec-Fetch-Mode: cors' \
-#   -H 'Sec-Fetch-Site: same-origin' \
-#   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36' \
-#   -H 'X-CSRFToken: eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwMjk5NjA3MiwiZXhwIjoxNzAzMDgyNDcyfQ.IjVzdXhGdkZCcVlDYlJGVnJka2JROERmeFd1Vm0zNmNaIg.cw7nlIZ-cV3qvghFt6IuQaULZ-8s6gCu85zBee5OXJDRoSz179cMNd2LuoLB4Ic92EWR-Llt6H6xP_goU2AXsA' \
-#   -H 'sec-ch-ua: "Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"' \
-#   -H 'sec-ch-ua-mobile: ?0' \
-#   -H 'sec-ch-ua-platform: "Linux"' \
-#   --compressed
-
-# curl 'https://sandbox.zenodo.org/api/records/11269/draft/files/setup.py/commit' \
-#   -H 'Accept: application/json, text/plain, */*' \
-#   -H 'Accept-Language: en-US,en;q=0.9' \
-#   -H 'Connection: keep-alive' \
-#   -H 'Content-Type: application/json' \
-#   -H 'Cookie: 04f20c86f07421a9ec0f9d5ba4be544f=7705ef0ecdb4f5b5c6800bf05b654082; _pk_ref.365.3783=%5B%22%22%2C%22%22%2C1702996065%2C%22https%3A%2F%2Fwww.google.com%2F%22%5D; _pk_id.365.3783=780b7fd43e8700f2.1702996065.; _pk_ses.365.3783=1; session=9ac56bc971221ab3_6581a868.5zCyz__CQpDwgQASBqnEbDrL6FY; csrftoken=eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwMjk5NjA3MiwiZXhwIjoxNzAzMDgyNDcyfQ.IjVzdXhGdkZCcVlDYlJGVnJka2JROERmeFd1Vm0zNmNaIg.cw7nlIZ-cV3qvghFt6IuQaULZ-8s6gCu85zBee5OXJDRoSz179cMNd2LuoLB4Ic92EWR-Llt6H6xP_goU2AXsA' \
-#   -H 'Origin: https://sandbox.zenodo.org' \
-#   -H 'Referer: https://sandbox.zenodo.org/uploads/11269' \
-#   -H 'Sec-Fetch-Dest: empty' \
-#   -H 'Sec-Fetch-Mode: cors' \
-#   -H 'Sec-Fetch-Site: same-origin' \
-#   -H 'User-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36' \
-#   -H 'X-CSRFToken: eyJhbGciOiJIUzUxMiIsImlhdCI6MTcwMjk5NjA3MiwiZXhwIjoxNzAzMDgyNDcyfQ.IjVzdXhGdkZCcVlDYlJGVnJka2JROERmeFd1Vm0zNmNaIg.cw7nlIZ-cV3qvghFt6IuQaULZ-8s6gCu85zBee5OXJDRoSz179cMNd2LuoLB4Ic92EWR-Llt6H6xP_goU2AXsA' \
-#   -H 'sec-ch-ua: "Google Chrome";v="119", "Chromium";v="119", "Not?A_Brand";v="24"' \
-#   -H 'sec-ch-ua-mobile: ?0' \
-#   -H 'sec-ch-ua-platform: "Linux"' \
-#   --data-raw '{}' \
-#   --compressed

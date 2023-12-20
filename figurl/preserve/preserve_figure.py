@@ -3,6 +3,7 @@ import os
 import tempfile
 import json
 import shutil
+import requests
 import kachery_cloud as kcl
 
 
@@ -12,14 +13,13 @@ def preserve_figure(*, figurl_url: str, output_file: str):
     if os.path.exists(output_file):
         raise Exception(f'Output file already exists: {output_file}')
     view_uri, data_uri, label = _parse_figurl_url(figurl_url)
-    if not view_uri.startswith('npm://'):
-        raise Exception('View must be of the form npm://...')
+    view_url = _view_uri_to_url(view_uri)
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_output_folder = os.path.join(tmpdir, 'figure')
         os.mkdir(tmp_output_folder)
         view_folder = os.path.join(tmp_output_folder, 'view')
         os.mkdir(view_folder)
-        _copy_npm_site_to_folder(view_uri, view_folder)
+        _copy_site_to_folder(view_url, view_folder)
         data_folder = os.path.join(tmp_output_folder, 'data')
         os.mkdir(data_folder)
         data_index_json_path = os.path.join(data_folder, 'index.json')
@@ -31,12 +31,41 @@ def preserve_figure(*, figurl_url: str, output_file: str):
         _copy_template_files_to_folder(templates_folder=os.path.join(thisdir, 'templates'), output_folder=tmp_output_folder)
         os.system(f'tar -czvf {output_file} -C {tmpdir} figure')
 
-def _copy_npm_site_to_folder(npm_uri: str, folder: str):
-    package_name, path = _parse_npm_uri(npm_uri)
-    with tempfile.TemporaryDirectory() as tmpdir:
-        os.system(f'npm pack {package_name} --pack-destination {tmpdir}')
-        os.system(f'tar -xvf {tmpdir}/*.tgz -C {tmpdir}')
-        os.system(f'cp -r {tmpdir}/package/{path}/* {folder}/')
+def _copy_site_to_folder(site_url: str, folder: str):
+    manifest_url = site_url + '/file-manifest.txt'
+    try:
+        file_manifest_txt = _download_file_text(manifest_url)
+    except:
+        print(f'Problem downloading manifest file: {manifest_url}')
+        print(f'Perhaps this view does not have a file-manifest.txt file.')
+        raise Exception('Unable to download file-manifest.txt')
+    file_list = file_manifest_txt.split('\n')
+    for f in file_list:
+        a = f.split('/')
+        for i in range(len(a) - 1):
+            dirpath = os.path.join(folder, *a[0:i + 1])
+            if not os.path.exists(dirpath):
+                os.mkdir(dirpath)
+        url = site_url + '/' + f
+        _download_file(url, os.path.join(folder, f))
+
+def _download_file_text(url: str):
+    print(f'Downloading file: {url}')
+    r = requests.get(url)
+    if not r.ok:
+        raise Exception(f'Problem downloading file: {url}')
+    return r.text
+
+def _download_file(url: str, dest: str):
+    print(f'Downloading file: {url}')
+    r = requests.get(url)
+    if not r.ok:
+        raise Exception(f'Problem downloading file: {url}')
+    # stream file to disk
+    with open(dest, 'wb') as f:
+        for chunk in r.iter_content(chunk_size=1024):
+            if chunk:
+                f.write(chunk)
 
 def _parse_npm_uri(npm_uri: str):
     a = npm_uri.split('/')
@@ -119,3 +148,8 @@ def _copy_template_files_to_folder(*, templates_folder: str, output_folder: str)
             shutil.copytree(os.path.join(templates_folder, f), os.path.join(output_folder, f))
         else:
             shutil.copy(os.path.join(templates_folder, f), os.path.join(output_folder, f))
+
+def _view_uri_to_url(uri: str):
+    if uri.startswith('npm://'):
+        package_name, path = _parse_npm_uri(uri)
+        return f'https://unpkg.com/{package_name}/{path}'
