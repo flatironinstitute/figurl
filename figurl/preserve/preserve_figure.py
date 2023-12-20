@@ -6,26 +6,30 @@ import shutil
 import kachery_cloud as kcl
 
 
-def preserve(*, figurl_url: str, output_folder: str):
-    if os.path.exists(output_folder):
-        raise Exception(f'Output folder already exists: {output_folder}')
-    os.mkdir(output_folder)
+def preserve_figure(*, figurl_url: str, output_file: str):
+    if not output_file.endswith('.tar.gz') and not output_file.endswith('.tgz'):
+        raise Exception('Output file must end with .tar.gz or .tgz')
+    if os.path.exists(output_file):
+        raise Exception(f'Output file already exists: {output_file}')
     view_uri, data_uri, label = _parse_figurl_url(figurl_url)
     if not view_uri.startswith('npm://'):
         raise Exception('View must be of the form npm://...')
-    view_folder = os.path.join(output_folder, 'view')
-    os.mkdir(view_folder)
-    _copy_npm_site_to_folder(view_uri, view_folder)
-    _patch_index_html(os.path.join(view_folder, 'index.html'))
-    data_folder = os.path.join(output_folder, 'data')
-    os.mkdir(data_folder)
-    data_index_json_path = os.path.join(data_folder, 'index.json')
-    kcl.load_file(data_uri, dest=data_index_json_path)
-    with open(data_index_json_path, 'r') as f:
-        data_index = json.load(f)
-    _load_sha1_files_from_object(object=data_index, data_folder=data_folder)
-    thisdir = os.path.dirname(os.path.realpath(__file__))
-    _copy_template_files_to_folder(templates_folder=os.path.join(thisdir, 'templates'), output_folder=output_folder)
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmp_output_folder = os.path.join(tmpdir, 'figure')
+        os.mkdir(tmp_output_folder)
+        view_folder = os.path.join(tmp_output_folder, 'view')
+        os.mkdir(view_folder)
+        _copy_npm_site_to_folder(view_uri, view_folder)
+        data_folder = os.path.join(tmp_output_folder, 'data')
+        os.mkdir(data_folder)
+        data_index_json_path = os.path.join(data_folder, 'index.json')
+        kcl.load_file(data_uri, dest=data_index_json_path)
+        with open(data_index_json_path, 'r') as f:
+            data_index = json.load(f)
+        _load_sha1_files_from_object(object=data_index, data_folder=data_folder)
+        thisdir = os.path.dirname(os.path.realpath(__file__))
+        _copy_template_files_to_folder(templates_folder=os.path.join(thisdir, 'templates'), output_folder=tmp_output_folder)
+        os.system(f'tar -czvf {output_file} -C {tmpdir} figure')
 
 def _copy_npm_site_to_folder(npm_uri: str, folder: str):
     package_name, path = _parse_npm_uri(npm_uri)
@@ -115,10 +119,3 @@ def _copy_template_files_to_folder(*, templates_folder: str, output_folder: str)
             shutil.copytree(os.path.join(templates_folder, f), os.path.join(output_folder, f))
         else:
             shutil.copy(os.path.join(templates_folder, f), os.path.join(output_folder, f))
-
-def _patch_index_html(path: str):
-    with open(path, 'r') as f:
-        txt = f.read()
-    txt = txt.replace('<head>', '<head><base href="view/">')
-    with open(path, 'w') as f:
-        f.write(txt)
