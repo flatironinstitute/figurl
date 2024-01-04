@@ -9,7 +9,7 @@ def serialize_wrapper(f):
         return _serialize(output)
     return wrapper
 
-def _serialize(x, *, compress_npy=False, label: str=''):
+def _serialize(x, *, compress_npy=False, label: str='', allow_float64: bool=False):
     if isinstance(x, np.integer):
         return int(x)
     elif isinstance(x, np.floating):
@@ -19,17 +19,20 @@ def _serialize(x, *, compress_npy=False, label: str=''):
         for key, val in x.items():
             if not isinstance(key, str):
                 raise Exception(f'serialize: keys must be string not {str(type(key))}: {label}')
-            ret[key] = _serialize(val, compress_npy=compress_npy, label=f'{label}.{key}')
+            ret[key] = _serialize(val, compress_npy=compress_npy, label=f'{label}.{key}', allow_float64=allow_float64)
         return ret
     elif (type(x) == list) or (type(x) == tuple):
-        return [_serialize(val, compress_npy=compress_npy, label=f'{label}[{ii}]') for ii, val in enumerate(x)]
+        return [_serialize(val, compress_npy=compress_npy, label=f'{label}[{ii}]', allow_float64=allow_float64) for ii, val in enumerate(x)]
     elif isinstance(x, np.ndarray):
         # todo: worry about byte order here
-        if str(x.dtype) not in ['uint8', 'int16', 'uint16', 'int32', 'uint32', 'float32']:
+        if str(x.dtype) not in ['uint8', 'int16', 'uint16', 'int32', 'uint32', 'float32', 'float64']:
             raise Exception(f'Unable to serialize numpy array with dtype {str(x.dtype)}: {label}')
+        if str(x.dtype) == 'float64':
+            if not allow_float64:
+                raise Exception('Unable to serialize numpy array with dtype float64. It is usually best to convert to float32, but if you need 64-bit, then use allow_float64=True.')
         ret = {
             '_type': 'ndarray',
-            'shape': _serialize(x.shape),
+            'shape': _serialize(x.shape, allow_float64=allow_float64),
             'dtype': str(x.dtype)
         }
         if compress_npy:

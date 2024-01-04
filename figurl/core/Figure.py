@@ -27,14 +27,15 @@ def url_from_url_dict(url_dict: dict, *, base_url: Union[str, None]=None):
 
 
 class Figure:
-    def __init__(self, *, data: Any, view_url: Union[str, None]=None, access_group: Union[str, None]=None, state: Union[dict, None]=None, sh: Union[str, None]=None, dir: Union[str, None]=None):
+    def __init__(self, *, data: Any, view_url: Union[str, None]=None, access_group: Union[str, None]=None, state: Union[dict, None]=None, sh: Union[str, None]=None, dir: Union[str, None]=None, allow_float64: bool=False):
         self._view_url = view_url
         self._data = data
         self._state = state
-        self._serialized_data = _serialize(self._data, compress_npy=True)
+        self._serialized_data = _serialize(self._data, compress_npy=True, allow_float64=allow_float64)
         self._access_group = access_group
         self._sh = sh
         self._dir = dir
+        self._allow_float64 = allow_float64
 
         if state is not None:
             print('DEPRECATION WARNING: pass state parameter into url() rather than constructor for figurl Figure')
@@ -64,7 +65,7 @@ class Figure:
         return self._state
     def set_data(self, data: Any):
         self._data = data
-        self._serialized_data = _serialize(data, compress_npy=True)
+        self._serialized_data = _serialize(data, compress_npy=True, allow_float64=self._allow_float64)
     def set_state(self, state: Union[dict, None]):
         self._state = state
     def url_dict(self, *, label: str, view_url: Union[str, None] = None, hide_app_bar: bool=False, state: Union[None, dict]=None):
