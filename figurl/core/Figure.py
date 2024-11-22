@@ -3,7 +3,7 @@ import subprocess
 import json
 from typing import Any, Union
 import urllib.parse
-import kachery_cloud as kcl
+import kachery as ka
 from .serialize_wrapper import _serialize
 
 def url_from_url_dict(url_dict: dict, *, base_url: Union[str, None]=None):
@@ -76,9 +76,10 @@ class Figure:
             state_json = simplejson.dumps(self._state, separators=(',', ':'), indent=None, allow_nan=False, sort_keys=True)
         else:
             state_json = None
-        self._data_uri = kcl.store_json(self._serialized_data)
+        self._data_uri = ka.store_json(self._serialized_data)
         if self._access_group is not None:
-            self._data_uri = kcl.encrypt_uri(self._data_uri, access_group=self._access_group)
+            raise Exception('Access group not supported')
+            # self._data_uri = kcl.encrypt_uri(self._data_uri, access_group=self._access_group)
         data_uri = self._data_uri
         if view_url is None:
             view_url = self._view_url

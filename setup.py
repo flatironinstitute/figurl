@@ -10,7 +10,7 @@ setup(
     install_requires=[
         'click',
         'altair',
-        'kachery_cloud>=0.2.11'
+        'kachery>=2.0.1'
     ],
     entry_points={
         "console_scripts": [

@@ -55,7 +55,7 @@ chart = alt.Chart(stocks).mark_line().encode(
 url = fig.Altair(chart).url(label='stocks chart')
 print(url)
 
-# Output: 
+# Output:
 # https://figurl.org/f?v=gs://figurl/vegalite-2&d=sha1://0369af9f1a54a5a410f99e63cb08b6b899d1c92f&label=stocks%20chart
 ```
 
@@ -206,9 +206,9 @@ kachery-cloud-cat sha1://21df8ad1fd24b9d9ad112b70de5cd5f7cd67d2a8
 ```
 
 ```python
-import kachery_cloud as kcl
+import kachery as ka
 
-a = kcl.load_json('sha1://21df8ad1fd24b9d9ad112b70de5cd5f7cd67d2a8')
+a = ka.load_json('sha1://21df8ad1fd24b9d9ad112b70de5cd5f7cd67d2a8')
 print(a)
 ```
 

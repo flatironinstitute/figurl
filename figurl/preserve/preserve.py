@@ -3,7 +3,7 @@ import os
 import tempfile
 import json
 import shutil
-import kachery_cloud as kcl
+import kachery as ka
 
 
 def preserve(*, figurl_url: str, output_folder: str):
@@ -20,7 +20,7 @@ def preserve(*, figurl_url: str, output_folder: str):
     data_folder = os.path.join(output_folder, 'data')
     os.mkdir(data_folder)
     data_index_json_path = os.path.join(data_folder, 'index.json')
-    kcl.load_file(data_uri, dest=data_index_json_path)
+    ka.load_file(data_uri, dest=data_index_json_path)
     with open(data_index_json_path, 'r') as f:
         data_index = json.load(f)
     _load_sha1_files_from_object(object=data_index, data_folder=data_folder)
@@ -87,7 +87,8 @@ def _load_sha1_files_from_object(*, object: Any, data_folder: str):
     for sha1 in sha1s:
         if not os.path.exists(os.path.join(data_folder, 'sha1')):
             os.mkdir(os.path.join(data_folder, 'sha1'))
-        kcl.load_file(f'sha1://{sha1}', dest=os.path.join(data_folder, 'sha1', sha1))
+        print(f'Loading sha1: {sha1}')
+        ka.load_file(f'sha1://{sha1}', dest=os.path.join(data_folder, 'sha1', sha1))
 
 def _get_sha1_uris_from_object(object: Any):
     if isinstance(object, str):
