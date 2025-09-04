@@ -5,7 +5,7 @@ requires = [ "setuptools>=61" ]
 
 [project]
 name = "figurl"
-version = "0.3.0a1"
+version = "0.3.1"
 license = { text = "Apache License (2.0)" }
 authors = [ { name = "Jeremy Magland", email = "jmagland@flatironinstitute.org" } ]
 classifiers = [
