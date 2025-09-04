@@ -1,0 +1,33 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+
+requires = [ "setuptools>=61" ]
+
+[project]
+name = "figurl"
+version = "0.3.0a1"
+license = { text = "Apache License (2.0)" }
+authors = [ { name = "Jeremy Magland", email = "jmagland@flatironinstitute.org" } ]
+classifiers = [
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+]
+dependencies = [
+  "altair",
+  "click",
+  "kachery>=2.0.1",
+]
+
+urls.Homepage = "https://github.com/flatironinstitute/figurl"
+urls.Issues = "https://github.com/flatironinstitute/figurl/issues"
+scripts.figurl = "figurl.cli:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = [ "." ]
+include = [ "*" ]
+
+[tool.setuptools.package-data]
+figurl = [ "preserve/templates/*" ]
